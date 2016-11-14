@@ -49,6 +49,7 @@ var UserComponent = React.createClass({
     var videoCollection = this.state.videoCollection;
 
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips/saved').then(function(response){
+      console.log(response);
       var videos = response.map(function(video){
         return (
           {title: video.titleName,
@@ -62,20 +63,14 @@ var UserComponent = React.createClass({
   },
   render: function(){
     var collection = this.state.videoCollection;
-    var uri = collection.map(function(video){
-      return {urls: video.get('uri')}
+    console.log(collection);
+    var uris = collection.map(function(video){
+      return <li key={video.cid}><video src={video.get('uri')[0].uri} width="520" height="440" controls></video></li>
     });
-    console.log(uri);
-    var vidUri = uri.map(function(uri){
-      return uri.urls;
-    });
-    var urls = vidUri.map(function(uris){
-      return uris
-    });
-    console.log(urls);
+
     return (
       <div>
-        <h1>working</h1>
+        <ul>{uris}</ul>
       </div>
     )
   }
