@@ -76,11 +76,11 @@ var LoginContainer = React.createClass({
   // console.log(userInfo);
   var self = this;
   var url = 'https://kevinbrowntown.herokuapp.com/';
-
+//i need to set the user and gamertag when logged in to use to get the xuid later on for pulling that gamers videos
   $.ajax(url + 'login?username=' + username + '&password=' + password).then(function(response){
-    localStorage.setItem('username', response.username);
+    localStorage.setItem('user', response);
     localStorage.setItem('token', response.sessionToken);
-    console.log(response);
+    console.log('res', response);
     if (response.sessionToken) {
       self.props.router.navigate('videos/', {trigger: true});
     };

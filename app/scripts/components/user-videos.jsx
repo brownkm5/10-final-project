@@ -90,7 +90,7 @@ var UserComponent = React.createClass({
 var VideosContainer = React.createClass({
   getInitialState: function(){
     var userXuid = '';
-
+    // var currentUser = user.current();
     return {
       xuid: 2535410944557981,
 
@@ -99,6 +99,7 @@ var VideosContainer = React.createClass({
   componentWillMount: function(){
     this.ajaxSetup();
     // this.getUser();
+    // console.log(this.state.user);
   },
   ajaxSetup: function(){
     var userToken = token;
@@ -110,7 +111,8 @@ var VideosContainer = React.createClass({
   },
   getUser: function(){
     var self = this;
-    //gets userXuid
+    //gets userXuid, this is only set up to get my videos, i need to make it so that it takes the xuid and inserts
+    //it into the ajax request
     // $.ajax('https://xboxapi.com/v2/profile').then(function(response){
     //   // console.log('response', response.userXuid);
     //   self.setState({xuid: response.userXuid});
