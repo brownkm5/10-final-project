@@ -18,7 +18,8 @@ var UserComponent = React.createClass({
     return {
       videos: videos,
       userXuid: 2535410944557981,
-      videoCollection : new model.VideoCollection()
+      videoCollection : new model.VideoCollection(),
+      pageNumber: 1
     }
   },
   componentWillMount: function(){
@@ -49,7 +50,7 @@ var UserComponent = React.createClass({
     var videoCollection = this.state.videoCollection;
 
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips/saved').then(function(response){
-      console.log(response);
+      // console.log(response);
       var videos = response.map(function(video){
         return (
           {title: video.titleName,
@@ -61,16 +62,26 @@ var UserComponent = React.createClass({
       self.setState({videoCollection: videoCollection});
     });
   },
+  handlePageNext: function(){
+    var pageNumber = this.state.pageNumber + 1;
+    this.setState({pageNumber: pageNumber});
+  },
   render: function(){
     var collection = this.state.videoCollection;
-    console.log(collection);
-    var uris = collection.map(function(video){
+    var pageNumber = this.state.pageNumber;
+
+
+    var uris = collection.page(pageNumber).map(function(video){
       return <li key={video.cid}><video src={video.get('uri')[0].uri} width="520" height="440" controls></video></li>
     });
 
     return (
       <div>
-        <ul>{uris}</ul>
+        <div>
+          <h3>Page: {pageNumber}</h3>
+          <ul className='col-sm-6 col-sm-offset-3'>{uris}</ul>
+        </div>
+        <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
       </div>
     )
   }

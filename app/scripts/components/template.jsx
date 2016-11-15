@@ -8,7 +8,10 @@ var TemplateComponent = React.createClass({
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <ul className="nav navbar-nav">
-              <li className="navbar-brand"><a href="#videos/">My Videos</a></li>
+              <li className="videos/"><a href="#videos/">My Videos</a></li>
+              <li className=""><a href="#followers/">My Followers</a></li>
+              <li className=""><a href="#videos/">My Friends</a></li>
+              <li className="profile"><a href="#videos/">My Profile</a></li>
             </ul>
           </div>
         </nav>
