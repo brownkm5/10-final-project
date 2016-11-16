@@ -9,15 +9,18 @@ var TemplateComponent = require('./template.jsx');
 var UserComponent = React.createClass({
   getInitialState: function(){
     var videos = '';
-    var xuid = '';
+    var user = JSON.parse(localStorage.getItem('user'));
+    var xuid = user.xuid;
+    // console.log(xuid);
     var response = '';
     //i set the userxuid to my actual xuid for building so that i didnt have to do an ajax request
     //everytime to get that, reset it back to var xuid for final deploy/ also in the container component
     //also remove the component will mount and replace it with the props and did update
     //youll still need the ajax setup
     return {
+      user: user,
       videos: videos,
-      userXuid: 2535410944557981,
+      xuid: xuid,
       videoCollection : new model.VideoCollection(),
       pageNumber: 1
     }
@@ -46,7 +49,7 @@ var UserComponent = React.createClass({
   // },
   getVideos: function(){
     var self = this;
-    var xuid = this.state.userXuid;
+    var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
 
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips/saved').then(function(response){
