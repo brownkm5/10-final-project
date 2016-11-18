@@ -6,6 +6,10 @@ var model = require('../models/followers.js');
 
 var token = require('../../../key.js').token;
 
+var Modal = require('react-modal');
+require('react-bootstrap');
+
+
 var FormComponent = React.createClass({
   getInitialState: function(){
     return {
@@ -78,6 +82,65 @@ var FollowerComponent = React.createClass({
   }
 });
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '500px'
+  }
+};
+
+var GamertagErrorModal = React.createClass({
+  getInitialState: function() {
+    return {
+      modalIsOpen: this.props.modalIsOpen
+
+    };
+  },
+  componentWillReceiveProps: function(nextProps){
+    this.setState({modalIsOpen: nextProps.modalIsOpen});
+  },
+  openModal: function() {
+    this.setState({modalIsOpen: true});
+  },
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+  closeModal: function(e) {
+    this.setState({modalIsOpen: false});
+    // localStorage.setItem('loggedIn', this.state.username);
+  },
+  render: function(){
+    return (
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+
+
+            <div className="modal-body">
+                <div className="body-modal">
+                  <h2>Oops, that gamertag wasn't found!</h2>
+                  <form onSubmit={this.closeModal} className="form-group">
+                    <button type="submit" className="btn btn-primary">Ok</button>
+                  </form>
+                </div>
+            </div>
+
+          </Modal>
+    );
+  }
+});
+
+
 var FollowersContainer = React.createClass({
   getInitialState: function(){
     var followerCollection = new model.FollowerCollection;
@@ -85,7 +148,8 @@ var FollowersContainer = React.createClass({
       followerCollection: followerCollection,
       showForm: false,
       user: '',
-      xuid: ''
+      xuid: '',
+      modalIsOpen: false
     }
   },
   xboxSetup: function(){
@@ -157,24 +221,26 @@ var FollowersContainer = React.createClass({
 
     // ended up having to put the post to parse followers in the then function because it would run that
     //before the request for the xuid was done
-    $.ajax('https://xboxapi.com/v2/xuid/' + gamertag).then(function(response){
+    $.ajax('https://xboxapi.com/v2/xuid/' + gamertag, {
+      success: function(response){
+        self.setState({xuid: response});
 
-      self.setState({xuid: response});
+        self.parseSetup();
 
-      self.parseSetup();
-
-      followerCollection.create({gamertag: gamertag, xuid: self.state.xuid});
-      self.setState({followerCollection: self.state.followerCollection});
-      // self.setState({xuid: undefined});
+        followerCollection.create({gamertag: gamertag, xuid: self.state.xuid});
+        self.setState({followerCollection: self.state.followerCollection});
+      },
+      error: function(){
+        console.log('error');
+        self.setState({modalIsOpen: true});
+      }
     });
-
-    // console.log(this.state.xuid);
-
   },
 
   render: function(){
     return (
       <TemplateComponent>
+        <GamertagErrorModal modalIsOpen={this.state.modalIsOpen}/>
         <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
         <div className="">
             {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}

@@ -59,7 +59,12 @@ componentWillMount: function(){
     var pageNumber = this.state.pageNumber;
 
     var uris = collection.page(pageNumber).map(function(video){
-      return <li key={video.cid}><video src={video.get('uri')[0].uri} width="520" height="440" controls></video></li>
+      return (
+        <li key={video.cid}>
+          <h3>{video.attributes.title}</h3>
+          <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
+        </li>
+      )
     });
 
     return (

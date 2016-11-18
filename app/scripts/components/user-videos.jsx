@@ -82,7 +82,6 @@ var UserComponent = React.createClass({
     var collection = this.state.videoCollection;
     var pageNumber = this.state.pageNumber;
 
-
     var uris = collection.page(pageNumber).map(function(video){
       return <li key={video.cid}><video src={video.get('uri')[0].uri} width="520" height="440" controls></video></li>
     });
