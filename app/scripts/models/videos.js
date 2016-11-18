@@ -9,7 +9,7 @@ var VideoCollection = Backbone.Collection.extend({
   page: function(pageNumber){
     var top = pageNumber * 10;
     var bottom = top - 10;
-    console.log(bottom, top);
+    // console.log(bottom, top);
     return this.filter(function(model, index){
 
       return (index<top && index>bottom);

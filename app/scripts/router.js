@@ -7,7 +7,7 @@ var LoginForm = require('./components/login-form.jsx').LoginContainer;
 var SignupForm = require('./components/signup-form.jsx').SignupContainer;
 var VideosContainer = require('./components/user-videos.jsx').VideosContainer;
 var FollowersContainer = require('./components/followers.jsx').FollowersContainer;
-
+var FollowerVideos = require('./components/follower-videos.jsx').FollowerVideoContainer;
 
 var AppRouter = Backbone.Router.extend({
   routes: {
@@ -15,7 +15,8 @@ var AppRouter = Backbone.Router.extend({
     'user-login/': 'login',
     'user-signup/': 'signup',
     'videos/': 'videos',
-    'followers/': 'followers'
+    'followers/': 'followers',
+    'followers/:id/videos/': 'followerVideos'
   },
 
   // initialize: function(){
@@ -49,6 +50,12 @@ var AppRouter = Backbone.Router.extend({
   followers: function(){
     ReactDOM.render(
       React.createElement(FollowersContainer, {router:this}),
+      document.getElementById('app')
+    );
+  },
+  followerVideos: function(userId){
+    ReactDOM.render(
+      React.createElement(FollowerVideos, {router:this}, {userId: userId}),
       document.getElementById('app')
     );
   }

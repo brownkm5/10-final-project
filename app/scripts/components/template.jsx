@@ -18,7 +18,10 @@ var TemplateComponent = React.createClass({
 
 
       <div className="container">
-        {this.props.children}
+        <div className='wrap'>
+          {this.props.children}
+        </div>
+
       </div>
 
 

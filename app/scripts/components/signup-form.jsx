@@ -30,7 +30,8 @@ var SignupForm = React.createClass({
       gamertag: this.state.gamertag
     }
     this.props.handleSignup(userData);
-
+//im thinking of adding the ajax request here so that it gets the xuid and i can add that
+//when im creating the user model
     this.setState({
       username: '',
       password: '',
@@ -70,6 +71,9 @@ var SignupForm = React.createClass({
   }
 });
 
+//i need to make it so that when a user signs up it makes an ajax request to get their
+//gamertag info and saves the xuid and gamertag to a model so that i dont have to do an
+//ajax request everytime a user logs in for their xuid
 var SignupContainer = React.createClass({
   componentWillMount: function(){
     this.ajaxSetup();

@@ -11,8 +11,10 @@ var UserComponent = React.createClass({
     var videos = '';
     var user = JSON.parse(localStorage.getItem('user'));
     var xuid = user.xuid;
-    // console.log(xuid);
     var response = '';
+
+    // ! not sure if i need this anymore either !
+
     //i set the userxuid to my actual xuid for building so that i didnt have to do an ajax request
     //everytime to get that, reset it back to var xuid for final deploy/ also in the container component
     //also remove the component will mount and replace it with the props and did update
@@ -69,6 +71,13 @@ var UserComponent = React.createClass({
     var pageNumber = this.state.pageNumber + 1;
     this.setState({pageNumber: pageNumber});
   },
+  handlePageLast: function(){
+    var pageNumber = this.state.pageNumber;
+    if (pageNumber > 1) {
+       pageNumber = this.state.pageNumber - 1;
+       this.setState({pageNumber: pageNumber});
+    }
+  },
   render: function(){
     var collection = this.state.videoCollection;
     var pageNumber = this.state.pageNumber;
@@ -82,9 +91,15 @@ var UserComponent = React.createClass({
       <div>
         <div>
           <h3>Page: {pageNumber}</h3>
-          <ul className='col-sm-6 col-sm-offset-3'>{uris}</ul>
+          <ul className='col-sm-6 col-sm-offset-3'>
+            {uris}
+          <li>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+          </li>
+          </ul>
         </div>
-        <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+
       </div>
     )
   }
@@ -96,7 +111,6 @@ var VideosContainer = React.createClass({
     // var currentUser = user.current();
     return {
       xuid: 2535410944557981,
-
     }
   },
   componentWillMount: function(){
@@ -116,6 +130,10 @@ var VideosContainer = React.createClass({
     var self = this;
     //gets userXuid, this is only set up to get my videos, i need to make it so that it takes the xuid and inserts
     //it into the ajax request
+
+    //! pretty sure i dont need this anymore with the update in my UserComponent to pull the xuid
+    //from localStorage !
+
     // $.ajax('https://xboxapi.com/v2/profile').then(function(response){
     //   // console.log('response', response.userXuid);
     //   self.setState({xuid: response.userXuid});
