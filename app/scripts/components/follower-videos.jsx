@@ -28,7 +28,7 @@ componentWillMount: function(){
     var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
 
-    $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips/saved').then(function(response){
+    $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
       // console.log(response);
       var videos = response.map(function(video){
         return (
