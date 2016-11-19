@@ -40,11 +40,25 @@ var Thumbnails = React.createClass({
       <div className="row">
         <div className="col-sm-6 col-md-4">
           <div className="thumbnail">
-            
             <div className="caption">
-              <h3>Thumbnail label</h3>
-              <p>...</p>
-              <p><a href="#" className="btn btn-primary" role="button">Button</a> <a href="#" className="btn btn-default" role="button">Button</a></p>
+              <h3>View your xbox videos!</h3>
+              <p>Create an account, and link it to your gamertag, to view your saved videos on xbox!</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-sm-6 col-md-4">
+          <div className="thumbnail">
+            <div className="caption">
+              <h3>Create a follower list.</h3>
+              <p>Search for other people's gamertags, and add them to your list of followers for easier access to your friend's saved videos.</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-sm-6 col-md-4">
+          <div className="thumbnail">
+            <div className="caption">
+              <h3>Like & comment.</h3>
+              <p>Like & comment on videos that you like.</p>
             </div>
           </div>
         </div>
