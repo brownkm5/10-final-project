@@ -53,9 +53,9 @@ var UserComponent = React.createClass({
     var self = this;
     var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
-
+// response has a gameclip id for each video, might need to use this to create comments on each video
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
-      // console.log(response);
+      console.log(response);
       var videos = response.map(function(video){
         return (
           {title: video.titleName,
@@ -83,6 +83,7 @@ var UserComponent = React.createClass({
     var pageNumber = this.state.pageNumber;
 
     var uris = collection.page(pageNumber).map(function(video){
+      console.log(video);
       return <li key={video.cid}><video src={video.get('uri')[0].uri} width="520" height="440" controls></video></li>
     });
 

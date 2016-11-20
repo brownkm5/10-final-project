@@ -12,7 +12,7 @@ var VideoCollection = Backbone.Collection.extend({
     // console.log(bottom, top);
     return this.filter(function(model, index){
 
-      return (index<top && index>bottom);
+      return (index<top && index>=bottom);
     });
   }
 });
