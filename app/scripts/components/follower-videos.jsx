@@ -1,6 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
 
+var like = require('../models/likes.js');
 var model = require('../models/videos.js');
 var TemplateComponent = require('./template.jsx');
 
@@ -34,7 +35,9 @@ componentWillMount: function(){
         return (
           {title: video.titleName,
           uri: video.gameClipUris,
-          recordDate: video.dateRecorded}
+          recordDate: video.dateRecorded,
+          xuid: video.xuid
+        }
         );
       });
       videoCollection.add(videos);
@@ -55,14 +58,16 @@ componentWillMount: function(){
 
   },
   render: function(){
+    var self = this;
     var collection = this.state.videoCollection;
     var pageNumber = this.state.pageNumber;
 
     var uris = collection.page(pageNumber).map(function(video){
       return (
-        <li key={video.cid}>
+        <li className='videos' key={video.cid}>
           <h3>{video.attributes.title}</h3>
           <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
+          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info glyphicon glyphicon-heart'></button>
         </li>
       )
     });
@@ -88,10 +93,48 @@ componentWillMount: function(){
 var FollowerVideoContainer = React.createClass({
   getInitialState: function(){
     var user = this.props.children.userId;
-
+    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
     return {
-      user: user
+      user: user,
+      objectId: userObjectId
     }
+  },
+
+  parseSetup: function(token){
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
+        xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
+        if(token){
+          xhr.setRequestHeader('X-Parse-Session-Token', token);
+        }
+      }
+    });
+  },
+  handleLike: function(video){
+    var self = this;
+    this.ajaxSetup();
+    var likeCollection = new like.LikesCollection();
+    var likedVideo = new like.Like();
+    var objectId = this.state.objectId;
+
+    likeCollection.objectId = objectId;
+
+    likedVideo.set('url', video.get('uri')[0].uri);
+    likedVideo.set('user', {
+      '__type': 'Pointer',
+      'className': '_User',
+      'objectId': objectId
+    });
+
+    likedVideo.set('title', video.attributes.title);
+    // console.log(video.attributes.xuid);
+    $.ajax('https://xboxapi.com/v2/gamertag/' + video.attributes.xuid).then(function(response){
+      likedVideo.set('gamertag', response);
+      self.parseSetup();
+      likeCollection.create(likedVideo);
+    });
+
   },
   componentWillMount: function(){
     this.ajaxSetup();
@@ -107,7 +150,7 @@ var FollowerVideoContainer = React.createClass({
   render: function(){
     return (
       <TemplateComponent>
-        <VideoComponent user={this.state.user}/>
+        <VideoComponent user={this.state.user} handleLike={this.handleLike}/>
       </TemplateComponent>
     )
   }

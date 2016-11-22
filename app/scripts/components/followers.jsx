@@ -181,14 +181,15 @@ var FollowersContainer = React.createClass({
     var self = this;
     var followerCollection = this.state.followerCollection;
 
-    //set the this.objectId on the followerCollection to the logged in user 
+    //set the this.objectId on the followerCollection to the logged in user
     //for use in the where function
     followerCollection.objectId = this.state.objectId;
 
     followerCollection.fetch().then(function(){
       self.setState({followerCollection: followerCollection});
-    });
 
+    });
+// console.log(followerCollection);
 
     // var self = this;
     // var token = localStorage.getItem('token');
