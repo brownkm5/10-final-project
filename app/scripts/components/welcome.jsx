@@ -57,8 +57,8 @@ var Thumbnails = React.createClass({
         <div className="col-sm-6 col-md-4">
           <div className="thumbnail">
             <div className="caption">
-              <h3>Like & comment.</h3>
-              <p>Like & comment on videos that you like.</p>
+              <h3>Like videos.</h3>
+              <p>Like videos and add them to your liked videos page for easier access to awesome captures.</p>
             </div>
           </div>
         </div>

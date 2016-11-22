@@ -57,7 +57,8 @@ var LoginForm = React.createClass({
 
 var LoginContainer = React.createClass({
   componentWillMount: function(){
-    this.ajaxSetup();
+    var token = localStorage.getItem('token');
+    this.ajaxSetup(token);
   },
   ajaxSetup: function(token){
     $.ajaxSetup({

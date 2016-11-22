@@ -144,10 +144,12 @@ var GamertagErrorModal = React.createClass({
 var FollowersContainer = React.createClass({
   getInitialState: function(){
     var followerCollection = new model.FollowerCollection;
+    var objectId = JSON.parse(localStorage.getItem('user')).objectId;
+    // console.log('state', followerCollection);
     return {
       followerCollection: followerCollection,
       showForm: false,
-      user: '',
+      objectId: objectId,
       xuid: '',
       modalIsOpen: false
     }
@@ -174,21 +176,28 @@ var FollowersContainer = React.createClass({
   },
 
   componentWillMount: function(){
-    // var self = this;
-    // var token = localStorage.getItem('token');
-    // var collection = this.state.followerCollection;
-    var user = JSON.parse(localStorage.getItem('user')).objectId;
-
-    this.setState({user : user});
-
     this.parseSetup();
 
     var self = this;
     var followerCollection = this.state.followerCollection;
 
+    //set the this.objectId on the followerCollection to the logged in user 
+    //for use in the where function
+    followerCollection.objectId = this.state.objectId;
+
     followerCollection.fetch().then(function(){
       self.setState({followerCollection: followerCollection});
     });
+
+
+    // var self = this;
+    // var token = localStorage.getItem('token');
+    // var collection = this.state.followerCollection;
+    // var user = JSON.parse(localStorage.getItem('user')).objectId;
+    // console.log(user);
+    // this.setState({user : user});
+
+
     // console.log(this.state.followerCollection);
     // this.state.followerCollection.fetch().parseWhere('user', 'User', )
     // this.setState({followerCollection: this.state.followerCollection});
@@ -215,6 +224,18 @@ var FollowersContainer = React.createClass({
   addfollower: function(gamertag){
     var followerCollection = this.state.followerCollection;
     var self = this;
+    var follower = new model.Follower();
+    var objectId= this.state.objectId;
+
+    follower.set('gamertag', gamertag);
+    follower.set('user', {
+      '__type': 'Pointer',
+      'className': '_User',
+      'objectId': objectId
+    });
+
+
+    console.log(follower);
 
     // this.parseSetup();
     this.xboxSetup();
@@ -223,11 +244,11 @@ var FollowersContainer = React.createClass({
     //before the request for the xuid was done
     $.ajax('https://xboxapi.com/v2/xuid/' + gamertag, {
       success: function(response){
-        self.setState({xuid: response});
-
+        // self.setState({xuid: response});
+        follower.set('xuid', response);
         self.parseSetup();
 
-        followerCollection.create({gamertag: gamertag, xuid: self.state.xuid});
+        followerCollection.create(follower);
         self.setState({followerCollection: self.state.followerCollection});
       },
       error: function(){
