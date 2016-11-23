@@ -34,11 +34,15 @@ componentWillMount: function(){
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
       // console.log(response);
       var videos = response.map(function(video){
+        // console.log(video);
         return (
           {title: video.titleName,
           uri: video.gameClipUris,
           recordDate: video.dateRecorded,
-          xuid: video.xuid
+          xuid: video.xuid,
+          clipDetails: video.gameClipDetails,
+          scid: video.scid,
+          clipId: video.gameClipId
         }
         );
       });
@@ -56,7 +60,7 @@ componentWillMount: function(){
        pageNumber = this.state.pageNumber - 1;
        this.setState({pageNumber: pageNumber});
     }
-    console.log(pageNumber);
+    // console.log(pageNumber);
 
   },
   render: function(){
@@ -65,12 +69,15 @@ componentWillMount: function(){
     var pageNumber = this.state.pageNumber;
 
     var uris = collection.page(pageNumber).map(function(video){
+      // console.log(video);
       return (
-        React.createElement("li", {className: "videos", key: video.cid}, 
-          React.createElement("h3", null, video.attributes.title), 
-          React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true}), 
-          React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info glyphicon glyphicon-heart"})
-        )
+
+          React.createElement("li", {className: "videos", key: video.cid}, 
+            React.createElement("h3", null, video.attributes.title), 
+            React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true}), 
+            React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info glyphicon glyphicon-heart"})
+          )
+
       )
     });
 
@@ -227,14 +234,18 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
   //add view and delete buttons to each gamertag
 
   render: function(){
+    var self = this;
     var followers = this.state.followers;
     // console.log('map', followers);
     var followerList = followers.map(function(follower){
       // console.log(follower);
       return (
-      React.createElement("a", {href: '#followers/' + follower.attributes.xuid + '/videos/', className: "col-sm-6", key: follower.cid}, 
-        React.createElement("h1", null, follower.attributes.gamertag)
-      )
+        React.createElement("div", {key: follower.cid}, 
+          React.createElement("a", {href: '#followers/' + follower.attributes.xuid + '/videos/', className: "col-sm-6"}, 
+            React.createElement("h1", null, follower.attributes.gamertag)
+          ), 
+          React.createElement("button", {onClick: function(){self.props.handleDelete(follower)}, type: "button", className: "btn btn-danger"}, "Delete Follower")
+        )
     )
     });
 
@@ -424,7 +435,12 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
       }
     });
   },
+  handleDelete: function(follower){
+    var followerCollection = this.state.followerCollection;
 
+    followerCollection.remove(follower);
+    followerCollection.sync();
+  },
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
@@ -433,7 +449,7 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
         React.createElement("div", {className: ""}, 
             this.state.showForm ? React.createElement(FormComponent, {addfollower: this.addfollower}) : null
         ), 
-        React.createElement(FollowerComponent, {followers: this.state.followerCollection})
+        React.createElement(FollowerComponent, {handleDelete: this.handleDelete, followers: this.state.followerCollection})
       )
     )
   }
@@ -478,21 +494,25 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        if(token){
-          xhr.setRequestHeader('X-Parse-Session-Token', token);
-        }
+        // if(token){
+        //   xhr.setRequestHeader('X-Parse-Session-Token', token);
+        // }
       }
     });
   },
   render: function(){
     var likeCollection = this.state.likeCollection;
     var videos = likeCollection.map(function(video){
-
+      console.log(video);
       return (
-        React.createElement("li", {className: "videos", key: video.cid}, 
+        React.createElement("div", {className: ""}, 
           React.createElement("h3", null, video.attributes.title), 
           React.createElement("h3", null, video.attributes.gamertag), 
-          React.createElement("video", {src: video.attributes.url, width: "520", height: "440", controls: true})
+          React.createElement("div", {key: video.cid, className: "embed-responsive embed-responsive-16by9"}, 
+            React.createElement("li", {className: "videos"}, 
+              React.createElement("video", {src: video.attributes.url, width: "520", height: "440", controls: true})
+            )
+          )
         )
       )
     });
@@ -501,7 +521,9 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     )
   }
 });
-
+// 38f63315-c95b-46ce-a35a-90109871a702
+// https://gameclipscontent-d2016.xboxlive.com/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479921397_5795533276fb38558ce3f618d53c6f17
+// "https:\/\/gameclipscontent-d2016.xboxlive.com\/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702\/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479933930_ea0274e1e2da13b968aa92289b7738e7"
 var LikesContainer = React.createClass({displayName: "LikesContainer",
   render: function(){
     return (
@@ -578,7 +600,7 @@ var LoginForm = React.createClass({displayName: "LoginForm",
 var LoginContainer = React.createClass({displayName: "LoginContainer",
   componentWillMount: function(){
     var token = localStorage.getItem('token');
-    this.ajaxSetup(token);
+    this.ajaxSetup();
   },
   ajaxSetup: function(token){
     $.ajaxSetup({
@@ -628,6 +650,7 @@ module.exports = {
 var React = require('react');
 var Backbone = require('backbone');
 
+var token = require('../../../key.js').token;
 
 var SignupHeader = React.createClass({displayName: "SignupHeader",
   render: function(){
@@ -649,20 +672,35 @@ var SignupForm = React.createClass({displayName: "SignupForm",
       gamertag: 'gamertag'
     }
   },
+  ajaxSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', userToken);
+      }
+    });
+  },
   handleSignup: function(e){
+    var self = this;
+
+    this.ajaxSetup();
     e.preventDefault();
-    var userData = {
-      username: this.state.username,
-      password: this.state.password,
-      gamertag: this.state.gamertag
-    }
-    this.props.handleSignup(userData);
-//im thinking of adding the ajax request here so that it gets the xuid and i can add that
-//when im creating the user model
-    this.setState({
-      username: '',
-      password: '',
-      gamertag: ''
+
+    $.ajax('https://xboxapi.com/v2/xuid/' + this.state.gamertag).then(function(response){
+      var userData = {
+        username: self.state.username,
+        password: self.state.password,
+        gamertag: self.state.gamertag,
+        xuid: response
+      }
+      // console.log(userData);
+      self.props.handleSignup(userData);
+// dont think this gets run after it calls handleSignup
+      // self.setState({
+      //   username: '',
+      //   password: '',
+      //   gamertag: ''
+      // });
     });
   },
   handleUsername: function(e){
@@ -703,20 +741,18 @@ var SignupForm = React.createClass({displayName: "SignupForm",
 //ajax request everytime a user logs in for their xuid
 var SignupContainer = React.createClass({displayName: "SignupContainer",
   componentWillMount: function(){
-    this.ajaxSetup();
+
   },
-  ajaxSetup: function(token){
+  parseSetup: function(){
     $.ajaxSetup({
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        if(token){
-          xhr.setRequestHeader('X-Parse-Session-Token', token);
-        }
       }
     });
   },
   handleSignup: function(userData){
+    this.parseSetup();
     console.log(userData);
   $.post('https://kevinbrowntown.herokuapp.com/users', userData).then(function(response){
     console.log(response);
@@ -740,7 +776,7 @@ module.exports = {
   SignupContainer: SignupContainer
 }
 
-},{"backbone":26,"react":460}],6:[function(require,module,exports){
+},{"../../../key.js":15,"backbone":26,"react":460}],6:[function(require,module,exports){
 "use strict";
 var React = require('react');
 var Backbone = require('backbone');
