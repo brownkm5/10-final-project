@@ -32,11 +32,15 @@ componentWillMount: function(){
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
       // console.log(response);
       var videos = response.map(function(video){
+        // console.log(video);
         return (
           {title: video.titleName,
           uri: video.gameClipUris,
           recordDate: video.dateRecorded,
-          xuid: video.xuid
+          xuid: video.xuid,
+          clipDetails: video.gameClipDetails,
+          scid: video.scid,
+          clipId: video.gameClipId
         }
         );
       });
@@ -54,7 +58,7 @@ componentWillMount: function(){
        pageNumber = this.state.pageNumber - 1;
        this.setState({pageNumber: pageNumber});
     }
-    console.log(pageNumber);
+    // console.log(pageNumber);
 
   },
   render: function(){
@@ -63,12 +67,15 @@ componentWillMount: function(){
     var pageNumber = this.state.pageNumber;
 
     var uris = collection.page(pageNumber).map(function(video){
+      // console.log(video);
       return (
-        <li className='videos' key={video.cid}>
-          <h3>{video.attributes.title}</h3>
-          <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
-          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info glyphicon glyphicon-heart'></button>
-        </li>
+
+          <li className='videos' key={video.cid}>
+            <h3>{video.attributes.title}</h3>
+            <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
+            <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info glyphicon glyphicon-heart'></button>
+          </li>
+
       )
     });
 

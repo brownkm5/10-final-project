@@ -61,14 +61,18 @@ var FollowerComponent = React.createClass({
   //add view and delete buttons to each gamertag
 
   render: function(){
+    var self = this;
     var followers = this.state.followers;
     // console.log('map', followers);
     var followerList = followers.map(function(follower){
       // console.log(follower);
       return (
-      <a href={'#followers/' + follower.attributes.xuid + '/videos/'} className='col-sm-6' key={follower.cid}>
-        <h1>{follower.attributes.gamertag}</h1>
-      </a>
+        <div key={follower.cid}>
+          <a href={'#followers/' + follower.attributes.xuid + '/videos/'} className='col-sm-6' >
+            <h1>{follower.attributes.gamertag}</h1>
+          </a>
+          <button onClick={function(){self.props.handleDelete(follower)}} type='button' className='btn btn-danger'>Delete Follower</button>
+        </div>
     )
     });
 
@@ -258,7 +262,12 @@ var FollowersContainer = React.createClass({
       }
     });
   },
+  handleDelete: function(follower){
+    var followerCollection = this.state.followerCollection;
 
+    followerCollection.remove(follower);
+    followerCollection.sync();
+  },
   render: function(){
     return (
       <TemplateComponent>
@@ -267,7 +276,7 @@ var FollowersContainer = React.createClass({
         <div className="">
             {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}
         </div>
-        <FollowerComponent followers={this.state.followerCollection}/>
+        <FollowerComponent handleDelete={this.handleDelete} followers={this.state.followerCollection}/>
       </TemplateComponent>
     )
   }
