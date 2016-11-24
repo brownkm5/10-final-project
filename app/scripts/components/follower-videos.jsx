@@ -126,8 +126,10 @@ var FollowerVideoContainer = React.createClass({
     var objectId = this.state.objectId;
 
     likeCollection.objectId = objectId;
-
-    likedVideo.set('url', video.get('uri')[0].uri);
+    // console.log(video);
+    likedVideo.set('scid', video.attributes.scid);
+    likedVideo.set('xuid', video.attributes.xuid);
+    likedVideo.set('clipId', video.attributes.clipId);
     likedVideo.set('user', {
       '__type': 'Pointer',
       'className': '_User',
@@ -140,6 +142,7 @@ var FollowerVideoContainer = React.createClass({
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
+      // console.log(likedVideo);
     });
 
   },

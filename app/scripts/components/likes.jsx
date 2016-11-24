@@ -37,15 +37,26 @@ var VideosContainer = React.createClass({
       }
     });
   },
+  ajaxSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', userToken);
+      }
+    });
+  },
   render: function(){
     var likeCollection = this.state.likeCollection;
+    this.ajaxSetup();
     var videos = likeCollection.map(function(video){
-      console.log(video);
+      $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
+        console.log(response.gameClipUris[0].uri);
+      });
       return (
-        <div className="">
+        <div key={video.cid} className="">
           <h3>{video.attributes.title}</h3>
           <h3>{video.attributes.gamertag}</h3>
-          <div key={video.cid} className="embed-responsive embed-responsive-16by9">
+          <div className="embed-responsive embed-responsive-16by9">
             <li className='videos'>
               <video src={video.attributes.url} width="520" height="440" controls></video>
             </li>
@@ -58,9 +69,7 @@ var VideosContainer = React.createClass({
     )
   }
 });
-// 38f63315-c95b-46ce-a35a-90109871a702
-// https://gameclipscontent-d2016.xboxlive.com/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479921397_5795533276fb38558ce3f618d53c6f17
-// "https:\/\/gameclipscontent-d2016.xboxlive.com\/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702\/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479933930_ea0274e1e2da13b968aa92289b7738e7"
+
 var LikesContainer = React.createClass({
   render: function(){
     return (
