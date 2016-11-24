@@ -41,7 +41,7 @@ var VideosContainer = React.createClass({
     var userToken = token;
     $.ajaxSetup({
       beforeSend: function(xhr){
-        xhr.setRequestHeader('X-Auth', userToken);
+        xhr.setRequestHeader('X-Auth', 'da4b685574e5546dbd34e64ed1e6c8c7946435d7');
       }
     });
   },
