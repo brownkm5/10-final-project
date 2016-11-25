@@ -128,8 +128,10 @@ var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoConta
     var objectId = this.state.objectId;
 
     likeCollection.objectId = objectId;
-
-    likedVideo.set('url', video.get('uri')[0].uri);
+    // console.log(video);
+    likedVideo.set('scid', video.attributes.scid);
+    likedVideo.set('xuid', video.attributes.xuid);
+    likedVideo.set('clipId', video.attributes.clipId);
     likedVideo.set('user', {
       '__type': 'Pointer',
       'className': '_User',
@@ -142,6 +144,7 @@ var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoConta
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
+      // console.log(likedVideo);
     });
 
   },
@@ -487,7 +490,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     likeCollection.fetch().then(function(){
       self.setState({likeCollection: likeCollection});
     });
-    console.log(likeCollection);
+    // console.log(likeCollection);
   },
   parseSetup: function(token){
     $.ajaxSetup({
@@ -500,15 +503,44 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
       }
     });
   },
-  render: function(){
+  ajaxSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', 'da4b685574e5546dbd34e64ed1e6c8c7946435d7');
+      }
+    });
+  },
+  getLikes: function(){
+    this.ajaxSetup();
+    var self = this;
     var likeCollection = this.state.likeCollection;
+
+    var newLikeCollection = likeCollection.map(function(video){
+
+      //this is where im getting the game details and then setting the url property on the videos, that works
+      $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
+        // console.log(response.gameClipUris[0].uri);
+        video.set('url', response.gameClipUris[0].uri);
+        // console.log('willmount', video);
+        self.setState({likeCollection: newLikeCollection});
+      });
+    });
+  },
+  render: function(){
+
+    this.getLikes();
+
+    var likeCollection = this.state.likeCollection;
+    console.log('likeCollection', likeCollection);
+
     var videos = likeCollection.map(function(video){
-      console.log(video);
+    // console.log('render', video.attributes.url);
       return (
-        React.createElement("div", {className: ""}, 
+        React.createElement("div", {key: video.cid, className: ""}, 
           React.createElement("h3", null, video.attributes.title), 
           React.createElement("h3", null, video.attributes.gamertag), 
-          React.createElement("div", {key: video.cid, className: "embed-responsive embed-responsive-16by9"}, 
+          React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
             React.createElement("li", {className: "videos"}, 
               React.createElement("video", {src: video.attributes.url, width: "520", height: "440", controls: true})
             )
@@ -521,9 +553,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     )
   }
 });
-// 38f63315-c95b-46ce-a35a-90109871a702
-// https://gameclipscontent-d2016.xboxlive.com/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479921397_5795533276fb38558ce3f618d53c6f17
-// "https:\/\/gameclipscontent-d2016.xboxlive.com\/0009000001e05d84-38f63315-c95b-46ce-a35a-90109871a702\/GameClip-Original.MP4?sv=2014-02-14&sr=b&si=DefaultAccess&sig=fxTwu9fr1zOjuowWcxb679V6Cz5ahU9Zw%2BYFaDnRkGE%3D&__gda__=1479933930_ea0274e1e2da13b968aa92289b7738e7"
+
 var LikesContainer = React.createClass({displayName: "LikesContainer",
   render: function(){
     return (
