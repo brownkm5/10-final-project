@@ -24,7 +24,7 @@ var VideosContainer = React.createClass({
     likeCollection.fetch().then(function(){
       self.setState({likeCollection: likeCollection});
     });
-    console.log(likeCollection);
+    // console.log(likeCollection);
   },
   parseSetup: function(token){
     $.ajaxSetup({
@@ -45,13 +45,31 @@ var VideosContainer = React.createClass({
       }
     });
   },
-  render: function(){
-    var likeCollection = this.state.likeCollection;
+  getLikes: function(){
     this.ajaxSetup();
-    var videos = likeCollection.map(function(video){
+    var self = this;
+    var likeCollection = this.state.likeCollection;
+
+    var newLikeCollection = likeCollection.map(function(video){
+
+      //this is where im getting the game details and then setting the url property on the videos, that works
       $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
-        console.log(response.gameClipUris[0].uri);
+        // console.log(response.gameClipUris[0].uri);
+        video.set('url', response.gameClipUris[0].uri);
+        // console.log('willmount', video);
+        self.setState({likeCollection: newLikeCollection});
       });
+    });
+  },
+  render: function(){
+
+    this.getLikes();
+
+    var likeCollection = this.state.likeCollection;
+    console.log('likeCollection', likeCollection);
+
+    var videos = likeCollection.map(function(video){
+    // console.log('render', video.attributes.url);
       return (
         <div key={video.cid} className="">
           <h3>{video.attributes.title}</h3>
