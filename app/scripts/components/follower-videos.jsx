@@ -142,7 +142,7 @@ var FollowerVideoContainer = React.createClass({
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
-      // console.log(likedVideo);
+      console.log(likedVideo);
     });
 
   },

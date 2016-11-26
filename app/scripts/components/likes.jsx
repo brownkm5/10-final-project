@@ -10,21 +10,42 @@ var VideosContainer = React.createClass({
   getInitialState: function(){
     var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
     return {
-      likeCollection: new like.LikesCollection(),
+      likeCollection: this.props.likeCollection,
       objectId: userObjectId
     }
   },
-  componentWillMount: function(){
-    this.parseSetup();
+  render: function(){
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    likeCollection.objectId = this.state.objectId;
-
-    likeCollection.fetch().then(function(){
-      self.setState({likeCollection: likeCollection});
+    var videos = likeCollection.map(function(video){
+      return (
+        <div key={video.cid} className="">
+          <h3>{video.attributes.title}</h3>
+          <h3>{video.attributes.gamertag}</h3>
+          <div className="embed-responsive embed-responsive-16by9">
+            <li className='videos'>
+              <video src={video.attributes.url} width="520" height="440" controls></video>
+            </li>
+          </div>
+          <button onClick={function(){self.props.handleDelete(video)}} type='button' className='btn btn-danger'>Delete Like</button>
+        </div>
+      )
     });
-    // console.log(likeCollection);
+    return (
+      <ul>{videos}</ul>
+    )
+  }
+});
+
+var LikesContainer = React.createClass({
+  getInitialState: function(){
+    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
+    return {
+      likeCollection: new like.LikesCollection(),
+      objectId: userObjectId,
+      test: true
+    }
   },
   parseSetup: function(token){
     $.ajaxSetup({
@@ -45,54 +66,50 @@ var VideosContainer = React.createClass({
       }
     });
   },
+
+  componentWillMount: function(){
+    this.parseSetup();
+    var self = this;
+    var likeCollection = this.state.likeCollection;
+
+    likeCollection.objectId = this.state.objectId;
+
+    likeCollection.fetch().then(function(){
+      self.setState({likeCollection: likeCollection});
+      self.getLikes();
+    });
+  },
   getLikes: function(){
     this.ajaxSetup();
     var self = this;
     var likeCollection = this.state.likeCollection;
 
     var newLikeCollection = likeCollection.map(function(video){
-
-      //this is where im getting the game details and then setting the url property on the videos, that works
       $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
-        // console.log(response.gameClipUris[0].uri);
         video.set('url', response.gameClipUris[0].uri);
-        // console.log('willmount', video);
+
         self.setState({likeCollection: newLikeCollection});
       });
+      console.log(self.state.likeCollection);
     });
   },
-  render: function(){
+  handleDelete: function(video){
+    this.parseSetup();
+    console.log(this.state.likeCollection);
+    var self = this;
 
-    this.getLikes();
-
+    var objectId = video.attributes.objectId;
     var likeCollection = this.state.likeCollection;
-    console.log('likeCollection', likeCollection);
 
-    var videos = likeCollection.map(function(video){
-    // console.log('render', video.attributes.url);
-      return (
-        <div key={video.cid} className="">
-          <h3>{video.attributes.title}</h3>
-          <h3>{video.attributes.gamertag}</h3>
-          <div className="embed-responsive embed-responsive-16by9">
-            <li className='videos'>
-              <video src={video.attributes.url} width="520" height="440" controls></video>
-            </li>
-          </div>
-        </div>
-      )
-    });
-    return (
-      <ul>{videos}</ul>
-    )
-  }
-});
-
-var LikesContainer = React.createClass({
+    var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
+    $.ajax(options).success(function(){
+//i need to figure out how to call forceupdate here
+    })
+  },
   render: function(){
     return (
       <TemplateComponent>
-        <VideosContainer />
+        <VideosContainer likeCollection={this.state.likeCollection} handleDelete={this.handleDelete}/>
       </TemplateComponent>
     )
   }

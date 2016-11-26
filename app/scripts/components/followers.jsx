@@ -9,6 +9,112 @@ var token = require('../../../key.js').token;
 var Modal = require('react-modal');
 require('react-bootstrap');
 
+// MODALS
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width                 : '500px'
+  }
+};
+
+var GamertagErrorModal = React.createClass({
+  getInitialState: function() {
+    return {
+      modalIsOpen: this.props.modalIsOpen
+
+    };
+  },
+  componentWillReceiveProps: function(nextProps){
+    this.setState({modalIsOpen: nextProps.modalIsOpen});
+  },
+  openModal: function() {
+    this.setState({modalIsOpen: true});
+  },
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+  closeModal: function(e) {
+    this.setState({modalIsOpen: false});
+    // localStorage.setItem('loggedIn', this.state.username);
+  },
+  render: function(){
+    return (
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+
+
+            <div className="modal-body">
+                <div className="body-modal">
+                  <h2>Oops, that gamertag wasn't found!</h2>
+                  <form onSubmit={this.closeModal} className="form-group">
+                    <button type="submit" className="btn btn-primary">Ok</button>
+                  </form>
+                </div>
+            </div>
+
+          </Modal>
+    );
+  }
+});
+
+
+var UserDeletedErrorModal = React.createClass({
+  getInitialState: function() {
+    return {
+      modalIsOpen: this.props.deleteModal
+
+    };
+  },
+  componentWillReceiveProps: function(nextProps){
+    this.setState({modalIsOpen: nextProps.modalIsOpen});
+  },
+  openModal: function() {
+    this.setState({modalIsOpen: true});
+  },
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+  closeModal: function(e) {
+    this.setState({modalIsOpen: false});
+    // localStorage.setItem('loggedIn', this.state.username);
+  },
+  render: function(){
+    return (
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+
+
+            <div className="modal-body">
+                <div className="body-modal">
+                  <h2>Sorry, something went wrong!</h2>
+                  <form onSubmit={this.closeModal} className="form-group">
+                    <button type="submit" className="btn btn-primary">Ok</button>
+                  </form>
+                </div>
+            </div>
+
+          </Modal>
+    );
+  }
+});
+
 
 var FormComponent = React.createClass({
   getInitialState: function(){
@@ -86,64 +192,6 @@ var FollowerComponent = React.createClass({
   }
 });
 
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    width                 : '500px'
-  }
-};
-
-var GamertagErrorModal = React.createClass({
-  getInitialState: function() {
-    return {
-      modalIsOpen: this.props.modalIsOpen
-
-    };
-  },
-  componentWillReceiveProps: function(nextProps){
-    this.setState({modalIsOpen: nextProps.modalIsOpen});
-  },
-  openModal: function() {
-    this.setState({modalIsOpen: true});
-  },
-  afterOpenModal: function() {
-    // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
-  },
-  closeModal: function(e) {
-    this.setState({modalIsOpen: false});
-    // localStorage.setItem('loggedIn', this.state.username);
-  },
-  render: function(){
-    return (
-          <Modal
-            isOpen={this.state.modalIsOpen}
-            onAfterOpen={this.afterOpenModal}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-            contentLabel="Example Modal"
-          >
-
-
-            <div className="modal-body">
-                <div className="body-modal">
-                  <h2>Oops, that gamertag wasn't found!</h2>
-                  <form onSubmit={this.closeModal} className="form-group">
-                    <button type="submit" className="btn btn-primary">Ok</button>
-                  </form>
-                </div>
-            </div>
-
-          </Modal>
-    );
-  }
-});
-
 
 var FollowersContainer = React.createClass({
   getInitialState: function(){
@@ -155,7 +203,8 @@ var FollowersContainer = React.createClass({
       showForm: false,
       objectId: objectId,
       xuid: '',
-      modalIsOpen: false
+      modalIsOpen: false,
+      deleteModal: false
     }
   },
   xboxSetup: function(){
@@ -240,7 +289,7 @@ var FollowersContainer = React.createClass({
     });
 
 
-    console.log(follower);
+    // console.log(follower);
 
     // this.parseSetup();
     this.xboxSetup();
@@ -257,21 +306,32 @@ var FollowersContainer = React.createClass({
         self.setState({followerCollection: self.state.followerCollection});
       },
       error: function(){
-        console.log('error');
+        // console.log('error');
         self.setState({modalIsOpen: true});
       }
     });
   },
   handleDelete: function(follower){
-    var followerCollection = this.state.followerCollection;
+    var self = this;
 
-    followerCollection.remove(follower);
-    followerCollection.sync();
+    var followerCollection = this.state.followerCollection;
+    var objectId = follower.attributes.objectId;
+
+    var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Followers/' + objectId, 'method': 'DELETE'};
+    $.ajax(options).success(function(){
+      //updates the page to show the user has been deleted
+      followerCollection.fetch().then(function(){
+        self.setState({followerCollection: self.state.followerCollection});
+      });
+    }).error(function(){
+      self.setState({deleteModal: true});
+    });
   },
   render: function(){
     return (
       <TemplateComponent>
         <GamertagErrorModal modalIsOpen={this.state.modalIsOpen}/>
+        <UserDeletedErrorModal deleteModal={this.state.deleteModal} />
         <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
         <div className="">
             {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}

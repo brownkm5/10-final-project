@@ -89,7 +89,7 @@ var UserComponent = React.createClass({
     var pageNumber = this.state.pageNumber;
     // console.log(collection);
     var uris = collection.page(pageNumber).map(function(video){
-      // console.log(video);
+      console.log(video);
       return (
         <li className='videos' key={video.cid}>
           <h3>{video.attributes.title}</h3>

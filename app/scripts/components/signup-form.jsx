@@ -2,6 +2,7 @@ var React = require('react');
 var Backbone = require('backbone');
 
 var token = require('../../../key.js').token;
+var FileModel = require('../models/file.js').File;
 
 var SignupHeader = React.createClass({
   render: function(){
@@ -9,6 +10,22 @@ var SignupHeader = React.createClass({
       <h2>Please sign up for an account and link your gamertag.</h2>
     )
   }
+});
+
+var PictureComponent = React.createClass({
+  getInitialState: function(){
+    return {
+      profilePic: ''
+    }
+  },
+
+   render: function(){
+     return (
+       <form>
+
+       </form>
+     )
+   }
 });
 
 var SignupForm = React.createClass({
@@ -32,26 +49,28 @@ var SignupForm = React.createClass({
     });
   },
   handleSignup: function(e){
+    e.preventDefault();
     var self = this;
 
     this.ajaxSetup();
-    e.preventDefault();
 
-    $.ajax('https://xboxapi.com/v2/xuid/' + this.state.gamertag).then(function(response){
-      var userData = {
-        username: self.state.username,
-        password: self.state.password,
-        gamertag: self.state.gamertag,
-        xuid: response
-      }
-      // console.log(userData);
-      self.props.handleSignup(userData);
-// dont think this gets run after it calls handleSignup
-      // self.setState({
-      //   username: '',
-      //   password: '',
-      //   gamertag: ''
-      // });
+    var picture = $('#inputFile')[0].files[0];
+    var file = new FileModel();
+    file.set('name', picture.name);
+    file.set('data', picture);
+    file.save().done(() =>{
+      $.ajax('https://xboxapi.com/v2/xuid/' + this.state.gamertag).then(function(response){
+        var userData = {
+          username: self.state.username,
+          password: self.state.password,
+          gamertag: self.state.gamertag,
+          xuid: response,
+          profilePic: file.get('url')
+        }
+
+        self.props.handleSignup(userData);
+
+      });
     });
   },
   handleUsername: function(e){
@@ -65,6 +84,11 @@ var SignupForm = React.createClass({
   handleGamertag: function(e){
     var gamertag = e.target.value;
     this.setState({gamertag: gamertag});
+  },
+  handlePicture: function(e){
+    var attachedFile = e.target.files[0];
+    // this.setState({profilePic: attachedFile});
+    console.log(attachedFile);
   },
   render: function(){
     return (
@@ -81,6 +105,7 @@ var SignupForm = React.createClass({
           <label htmlFor="gamertag">Gamertag</label>
           <input onChange={this.handleGamertag} type="text" className="form-control" id="gamertag" placeholder="Gamertag" />
         </div>
+        <input id='inputFile' type="file" />
         <button type="submit" className="btn btn-success">Sign Up</button>
       </form>
     )
@@ -117,6 +142,7 @@ var SignupContainer = React.createClass({
         </div>
         <div className='col-sm-5'>
           <SignupForm handleSignup={this.handleSignup}/>
+          <PictureComponent />
         </div>
       </div>
     )
