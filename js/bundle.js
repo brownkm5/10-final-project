@@ -629,7 +629,9 @@ var LikesContainer = React.createClass({displayName: "LikesContainer",
 
     var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
     $.ajax(options).success(function(){
-//i need to figure out how to call forceupdate here
+      likeCollection.fetch().then(function(){
+        self.setState({likeCollection: likeCollection});
+      });
     })
   },
   render: function(){
