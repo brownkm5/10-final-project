@@ -533,21 +533,21 @@ var model = require('../models/likes.js');
 var TemplateComponent = require('./template.jsx');
 
 var VideosContainer = React.createClass({displayName: "VideosContainer",
-  getInitialState: function(){
-    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
-    return {
-      likeCollection: this.props.likeCollection,
-      objectId: userObjectId
-    }
-  },
+  // getInitialState: function(){
+  //   var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
+  //   return {
+  //     likeCollection: this.props.likeCollection,
+  //     objectId: userObjectId
+  //   }
+  // },
   render: function(){
     var self = this;
-    var likeCollection = this.state.likeCollection;
+    var likeCollection = this.props.likeCollection;
 
     var videos = likeCollection.map(function(video){
       return (
         React.createElement("div", {key: video.cid, className: ""}, 
-          React.createElement("h3", null, video.attributes.title), 
+          React.createElement("h3", null, video.get('title')), 
           React.createElement("h3", null, video.attributes.gamertag), 
           React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
             React.createElement("li", {className: "videos"}, 
@@ -598,9 +598,7 @@ var LikesContainer = React.createClass({displayName: "LikesContainer",
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    likeCollection.objectId = this.state.objectId;
-
-    likeCollection.fetch().then(function(){
+    likeCollection.user(this.state.objectId).fetch().then(function(){
       self.setState({likeCollection: likeCollection});
       self.getLikes();
     });
@@ -610,29 +608,38 @@ var LikesContainer = React.createClass({displayName: "LikesContainer",
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    var newLikeCollection = likeCollection.map(function(video){
-      $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
+    // Get all the updated images from xbox api
+    var imageFetches = likeCollection.map(function(video){
+      return $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
         video.set('url', response.gameClipUris[0].uri);
-
-        self.setState({likeCollection: newLikeCollection});
       });
-      console.log(self.state.likeCollection);
     });
+
+    // Wait for all xbox requests to finish
+    Promise.all(imageFetches).then(function(){
+      self.setState({likeCollection: likeCollection});
+    });
+
   },
   handleDelete: function(video){
     this.parseSetup();
-    console.log(this.state.likeCollection);
     var self = this;
-
-    var objectId = video.attributes.objectId;
-    var likeCollection = this.state.likeCollection;
-
-    var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
-    $.ajax(options).success(function(){
-      likeCollection.fetch().then(function(){
-        self.setState({likeCollection: likeCollection});
-      });
-    })
+    console.warn(video);
+    video.destroy().then(function(){
+      self.setState({likeCollection: self.state.likeCollection});
+    });
+    // console.log(this.state.likeCollection);
+    // var self = this;
+    //
+    // var objectId = video.attributes.objectId;
+    // var likeCollection = this.state.likeCollection;
+    //
+    // var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
+    // $.ajax(options).success(function(){
+    //   likeCollection.fetch().then(function(){
+    //     self.setState({likeCollection: likeCollection});
+    //   });
+    // })
   },
   render: function(){
     return (
@@ -1206,12 +1213,12 @@ var ReactSlickDemo = React.createClass({displayName: "ReactSlickDemo",
         autoplaySpeed: 4000,
         fade: true,
         arrows: true,
-        pauseOnHover: true,
+        pauseOnHover: true
       };
       return (
         React.createElement("div", {className: "carousel"}, 
 
-          React.createElement(Slider, React.__spread({},  settings), 
+          React.createElement(Slider, React.__spread({},  settings, {className: ""}), 
               React.createElement("div", null, React.createElement("img", {src: "https://i3.wallpaperscraft.com/image/destiny_rise_of_iron_character_wolves_109702_2560x1080.jpg"})), 
                 React.createElement("div", null, React.createElement("img", {src: "https://charlieintel.com/wp-content/uploads/2016/05/image-13.jpeg"})), 
                 React.createElement("div", null, React.createElement("img", {src: "http://compass.xboxlive.com/assets/1c/c9/1cc92786-77f4-4587-9de0-23fdc0082d16.jpg?n=Forza6_E3_PressKit_01.jpg"})), 
@@ -1230,7 +1237,7 @@ var Thumbnails = React.createClass({displayName: "Thumbnails",
   render: function(){
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement("div", {className: "col-xs-12 col-sm-4 col-md-4"}, 
           React.createElement("div", {className: "thumbnail"}, 
             React.createElement("div", {className: "caption"}, 
               React.createElement("h3", null, "View your xbox videos!"), 
@@ -1238,7 +1245,7 @@ var Thumbnails = React.createClass({displayName: "Thumbnails",
             )
           )
         ), 
-        React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement("div", {className: "col-xs-12 col-sm-4 col-md-4"}, 
           React.createElement("div", {className: "thumbnail"}, 
             React.createElement("div", {className: "caption"}, 
               React.createElement("h3", null, "Create a follower list."), 
@@ -1246,7 +1253,7 @@ var Thumbnails = React.createClass({displayName: "Thumbnails",
             )
           )
         ), 
-        React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement("div", {className: "col-xs-12 col-sm-4 col-md-4"}, 
           React.createElement("div", {className: "thumbnail"}, 
             React.createElement("div", {className: "caption"}, 
               React.createElement("h3", null, "Like videos."), 
@@ -1299,7 +1306,7 @@ var WelcomeContainer = React.createClass({displayName: "WelcomeContainer",
           React.createElement(WelcomeHeader, null)
         )
       ), 
-      React.createElement("div", {className: "carousel"}, 
+      React.createElement("div", {className: "carousel slide"}, 
         React.createElement(ReactSlickDemo, null)
       ), 
       React.createElement("div", {className: "thumbnails"}, 
@@ -1398,17 +1405,23 @@ module.exports = {
 var Backbone = require('backbone');
 
 var Like = Backbone.Model.extend({
-  idAttribute:'_id'
+  idAttribute:'objectId'
 });
 
 var LikesCollection = Backbone.Collection.extend({
   model: Like,
+  queryString: '',
   parse: function(data){
     return data.results
   },
+  user: function(objectId){
+    this.queryString = '?where={"user": ' + ' {"__type": "Pointer", "className": "_User", "objectId": "' + objectId + '"}}';
+    return this;
+  },
   url: function(){
-     var queryString = '?where={"user": ' + ' {"__type": "Pointer", "className": "_User", "objectId": "' + this.objectId + '"}}';
-     return 'https://kevinbrowntown.herokuapp.com/classes/Likes/' + queryString;
+    var url = 'https://kevinbrowntown.herokuapp.com/classes/Likes/' + this.queryString;
+    this.queryString = '';
+    return url;
   }
 });
 
