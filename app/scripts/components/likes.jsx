@@ -86,7 +86,7 @@ var LikesContainer = React.createClass({
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    // Get all the updated images from xbox api
+    // Get all the updated urls from xbox api
     var imageFetches = likeCollection.map(function(video){
       return $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
         video.set('url', response.gameClipUris[0].uri);
