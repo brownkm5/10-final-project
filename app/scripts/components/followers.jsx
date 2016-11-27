@@ -158,14 +158,6 @@ var FollowerComponent = React.createClass({
     // console.log(nextProps.followers);
     this.setState({followers: nextProps.followers});
   },
-
-  //create collection of followers from the inputs of the form
-  //then map over that collection and list them out with links to follower-video page
-  //send the gamertag to that page and make a request for that users video with their xuid
-  //have to make a request for the xuid and save it to the gamertag model for faster video loading
-  //and so there isnt an ajax request just for the xuid everytime the view button is clicked
-  //add view and delete buttons to each gamertag
-
   render: function(){
     var self = this;
     var followers = this.state.followers;
@@ -173,11 +165,11 @@ var FollowerComponent = React.createClass({
     var followerList = followers.map(function(follower){
       // console.log(follower);
       return (
-        <div key={follower.cid}>
-          <a href={'#followers/' + follower.attributes.xuid + '/videos/'} className='col-sm-6' >
-            <h1>{follower.attributes.gamertag}</h1>
+        <div className='col-sm-6' key={follower.cid}>
+          <a onClick={function(){self.props.handleFollower(follower.get('gamertag'))}} href={'#followers/' + follower.attributes.xuid + '/videos/'} className='' >
+            <h1>{follower.get('gamertag')}</h1>
           </a>
-          <button onClick={function(){self.props.handleDelete(follower)}} type='button' className='btn btn-danger'>Delete Follower</button>
+          <button onClick={function(){self.props.handleDelete(follower)}} type='button' className='follower-delete btn btn-danger'>Delete Follower</button>
         </div>
     )
     });
@@ -288,17 +280,13 @@ var FollowersContainer = React.createClass({
       'objectId': objectId
     });
 
-
-    // console.log(follower);
-
-    // this.parseSetup();
     this.xboxSetup();
 
     // ended up having to put the post to parse followers in the then function because it would run that
     //before the request for the xuid was done
     $.ajax('https://xboxapi.com/v2/xuid/' + gamertag, {
       success: function(response){
-        // self.setState({xuid: response});
+
         follower.set('xuid', response);
         self.parseSetup();
 
@@ -306,7 +294,7 @@ var FollowersContainer = React.createClass({
         self.setState({followerCollection: self.state.followerCollection});
       },
       error: function(){
-        // console.log('error');
+
         self.setState({modalIsOpen: true});
       }
     });
@@ -327,16 +315,22 @@ var FollowersContainer = React.createClass({
       self.setState({deleteModal: true});
     });
   },
+  handleFollower: function(follower){
+    localStorage.setItem('follower', follower);
+  },
   render: function(){
     return (
       <TemplateComponent>
         <GamertagErrorModal modalIsOpen={this.state.modalIsOpen}/>
         <UserDeletedErrorModal deleteModal={this.state.deleteModal} />
+        <h3>My Followers</h3>
+
         <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
+
         <div className="">
             {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}
         </div>
-        <FollowerComponent handleDelete={this.handleDelete} followers={this.state.followerCollection}/>
+        <FollowerComponent handleFollower={this.handleFollower} handleDelete={this.handleDelete} followers={this.state.followerCollection}/>
       </TemplateComponent>
     )
   }

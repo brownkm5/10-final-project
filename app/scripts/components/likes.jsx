@@ -20,12 +20,12 @@ var VideosContainer = React.createClass({
 
     var videos = likeCollection.map(function(video){
       return (
-        <div key={video.cid} className="">
+        <div key={video.cid} className="liked-videos">
+          <h3 className='gamertag'>{video.get('gamertag')}</h3>
           <h3>{video.get('title')}</h3>
-          <h3>{video.attributes.gamertag}</h3>
           <div className="embed-responsive embed-responsive-16by9">
             <li className='videos'>
-              <video src={video.attributes.url} width="520" height="440" controls></video>
+              <video src={video.get('url')} width="520" height="440" controls></video>
             </li>
           </div>
           <button onClick={function(){self.props.handleDelete(video)}} type='button' className='btn btn-danger'>Delete Like</button>
@@ -33,7 +33,11 @@ var VideosContainer = React.createClass({
       )
     });
     return (
-      <ul>{videos}</ul>
+      <div>
+        <h3>My Liked Videos</h3>
+        <ul>{videos}</ul>
+      </div>
+
     )
   }
 });

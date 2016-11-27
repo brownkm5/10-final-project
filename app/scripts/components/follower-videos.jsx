@@ -65,33 +65,44 @@ componentWillMount: function(){
     var self = this;
     var collection = this.state.videoCollection;
     var pageNumber = this.state.pageNumber;
+    var follower = localStorage.getItem('follower');
 
     var uris = collection.page(pageNumber).map(function(video){
-      // console.log(video);
+      console.log(video);
       return (
+        <div key={video.cid} className=''>
+          <h3>{video.get('title')}</h3>
 
-          <li className='videos' key={video.cid}>
-            <h3>{video.attributes.title}</h3>
-            <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
-            <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info glyphicon glyphicon-heart'></button>
-          </li>
-
+          <div className="embed-responsive embed-responsive-16by9">
+            <li>
+              <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
+            </li>
+          </div>
+          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info'>Like This Video!</button>
+        </div>
       )
     });
 
     return (
       <div>
         <div>
-          <h3>Page: {pageNumber}</h3>
-          <ul className='col-sm-6 col-sm-offset-3'>{uris}</ul>
+          <h3>Clips saved by {follower}</h3>
+          <div className="pagenation col-sm-12">
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
+            <h3>Page: {pageNumber}</h3>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+          </div>
+          <div className='video-container'>
+            <ul className='col-sm-12'>
+              {uris}
+            </ul>
+          </div>
+          <div className="pagenation">
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
+            <h3>Page: {pageNumber}</h3>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+          </div>
         </div>
-        <div className='col-sm-12'>
-        <div className="page-buttons">
-          <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
-          <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
-        </div>
-        </div>
-
       </div>
     )
   }
