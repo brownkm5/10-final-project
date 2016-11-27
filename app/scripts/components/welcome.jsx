@@ -14,12 +14,12 @@ var ReactSlickDemo = React.createClass({
         autoplaySpeed: 4000,
         fade: true,
         arrows: true,
-        pauseOnHover: true,
+        pauseOnHover: true
       };
       return (
         <div className='carousel'>
 
-          <Slider {...settings}>
+          <Slider {...settings} className=''>
               <div><img src='https://i3.wallpaperscraft.com/image/destiny_rise_of_iron_character_wolves_109702_2560x1080.jpg' /></div>
                 <div><img src='https://charlieintel.com/wp-content/uploads/2016/05/image-13.jpeg' /></div>
                 <div><img src='http://compass.xboxlive.com/assets/1c/c9/1cc92786-77f4-4587-9de0-23fdc0082d16.jpg?n=Forza6_E3_PressKit_01.jpg' /></div>
@@ -38,7 +38,7 @@ var Thumbnails = React.createClass({
   render: function(){
     return (
       <div className="row">
-        <div className="col-sm-6 col-md-4">
+        <div className="col-xs-12 col-sm-4 col-md-4">
           <div className="thumbnail">
             <div className="caption">
               <h3>View your xbox videos!</h3>
@@ -46,7 +46,7 @@ var Thumbnails = React.createClass({
             </div>
           </div>
         </div>
-        <div className="col-sm-6 col-md-4">
+        <div className="col-xs-12 col-sm-4 col-md-4">
           <div className="thumbnail">
             <div className="caption">
               <h3>Create a follower list.</h3>
@@ -54,7 +54,7 @@ var Thumbnails = React.createClass({
             </div>
           </div>
         </div>
-        <div className="col-sm-6 col-md-4">
+        <div className="col-xs-12 col-sm-4 col-md-4">
           <div className="thumbnail">
             <div className="caption">
               <h3>Like videos.</h3>
@@ -107,7 +107,7 @@ var WelcomeContainer = React.createClass({
           <WelcomeHeader />
         </div>
       </div>
-      <div className='carousel'>
+      <div className='carousel slide'>
         <ReactSlickDemo />
       </div>
       <div className='thumbnails'>

@@ -7,21 +7,21 @@ var model = require('../models/likes.js');
 var TemplateComponent = require('./template.jsx');
 
 var VideosContainer = React.createClass({
-  getInitialState: function(){
-    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
-    return {
-      likeCollection: this.props.likeCollection,
-      objectId: userObjectId
-    }
-  },
+  // getInitialState: function(){
+  //   var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
+  //   return {
+  //     likeCollection: this.props.likeCollection,
+  //     objectId: userObjectId
+  //   }
+  // },
   render: function(){
     var self = this;
-    var likeCollection = this.state.likeCollection;
+    var likeCollection = this.props.likeCollection;
 
     var videos = likeCollection.map(function(video){
       return (
         <div key={video.cid} className="">
-          <h3>{video.attributes.title}</h3>
+          <h3>{video.get('title')}</h3>
           <h3>{video.attributes.gamertag}</h3>
           <div className="embed-responsive embed-responsive-16by9">
             <li className='videos'>
@@ -72,9 +72,7 @@ var LikesContainer = React.createClass({
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    likeCollection.objectId = this.state.objectId;
-
-    likeCollection.fetch().then(function(){
+    likeCollection.user(this.state.objectId).fetch().then(function(){
       self.setState({likeCollection: likeCollection});
       self.getLikes();
     });
@@ -84,29 +82,38 @@ var LikesContainer = React.createClass({
     var self = this;
     var likeCollection = this.state.likeCollection;
 
-    var newLikeCollection = likeCollection.map(function(video){
-      $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
+    // Get all the updated images from xbox api
+    var imageFetches = likeCollection.map(function(video){
+      return $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
         video.set('url', response.gameClipUris[0].uri);
-
-        self.setState({likeCollection: newLikeCollection});
       });
-      console.log(self.state.likeCollection);
     });
+
+    // Wait for all xbox requests to finish
+    Promise.all(imageFetches).then(function(){
+      self.setState({likeCollection: likeCollection});
+    });
+
   },
   handleDelete: function(video){
     this.parseSetup();
-    console.log(this.state.likeCollection);
     var self = this;
-
-    var objectId = video.attributes.objectId;
-    var likeCollection = this.state.likeCollection;
-
-    var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
-    $.ajax(options).success(function(){
-      likeCollection.fetch().then(function(){
-        self.setState({likeCollection: likeCollection});
-      });
-    })
+    console.warn(video);
+    video.destroy().then(function(){
+      self.setState({likeCollection: self.state.likeCollection});
+    });
+    // console.log(this.state.likeCollection);
+    // var self = this;
+    //
+    // var objectId = video.attributes.objectId;
+    // var likeCollection = this.state.likeCollection;
+    //
+    // var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
+    // $.ajax(options).success(function(){
+    //   likeCollection.fetch().then(function(){
+    //     self.setState({likeCollection: likeCollection});
+    //   });
+    // })
   },
   render: function(){
     return (
