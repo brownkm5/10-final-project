@@ -5763,6 +5763,9 @@ button.close {
 *::after {
   box-sizing: border-box; }
 
+.navbar {
+  border-radius: 0px; }
+
 #signup, #login {
   color: white; }
 
@@ -5792,7 +5795,7 @@ button.close {
       .welcome-contain .carousel img {
         height: 300px; } }
 
-a {
+a, h3 {
   display: inline-block; }
 
 ul {
@@ -5806,5 +5809,23 @@ ul {
   .body-modal button {
     width: 100px;
     font-size: 18px; }
+
+.liked-videos .gamertag {
+  margin-right: 360px; }
+
+.follower-delete {
+  display: block; }
+
+.video-container {
+  height: 5010.17px;
+  margin-bottom: 30px; }
+
+.pagenation {
+  text-align: center;
+  margin-bottom: 30px; }
+  .pagenation h3 {
+    width: 150px;
+    margin-left: 300px;
+    margin-right: 300px; }
 
 /*# sourceMappingURL=app.css.map */

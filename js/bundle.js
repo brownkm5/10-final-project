@@ -67,33 +67,44 @@ componentWillMount: function(){
     var self = this;
     var collection = this.state.videoCollection;
     var pageNumber = this.state.pageNumber;
+    var follower = localStorage.getItem('follower');
 
     var uris = collection.page(pageNumber).map(function(video){
-      // console.log(video);
+      console.log(video);
       return (
+        React.createElement("div", {key: video.cid, className: ""}, 
+          React.createElement("h3", null, video.get('title')), 
 
-          React.createElement("li", {className: "videos", key: video.cid}, 
-            React.createElement("h3", null, video.attributes.title), 
-            React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true}), 
-            React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info glyphicon glyphicon-heart"})
-          )
-
+          React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
+            React.createElement("li", null, 
+              React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true})
+            )
+          ), 
+          React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info"}, "Like This Video!")
+        )
       )
     });
 
     return (
       React.createElement("div", null, 
         React.createElement("div", null, 
-          React.createElement("h3", null, "Page: ", pageNumber), 
-          React.createElement("ul", {className: "col-sm-6 col-sm-offset-3"}, uris)
-        ), 
-        React.createElement("div", {className: "col-sm-12"}, 
-        React.createElement("div", {className: "page-buttons"}, 
-          React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
-          React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+          React.createElement("h3", null, "Clips saved by ", follower), 
+          React.createElement("div", {className: "pagenation col-sm-12"}, 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("h3", null, "Page: ", pageNumber), 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+          ), 
+          React.createElement("div", {className: "video-container"}, 
+            React.createElement("ul", {className: "col-sm-12"}, 
+              uris
+            )
+          ), 
+          React.createElement("div", {className: "pagenation"}, 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("h3", null, "Page: ", pageNumber), 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+          )
         )
-        )
-
       )
     )
   }
@@ -334,14 +345,6 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
     // console.log(nextProps.followers);
     this.setState({followers: nextProps.followers});
   },
-
-  //create collection of followers from the inputs of the form
-  //then map over that collection and list them out with links to follower-video page
-  //send the gamertag to that page and make a request for that users video with their xuid
-  //have to make a request for the xuid and save it to the gamertag model for faster video loading
-  //and so there isnt an ajax request just for the xuid everytime the view button is clicked
-  //add view and delete buttons to each gamertag
-
   render: function(){
     var self = this;
     var followers = this.state.followers;
@@ -349,11 +352,11 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
     var followerList = followers.map(function(follower){
       // console.log(follower);
       return (
-        React.createElement("div", {key: follower.cid}, 
-          React.createElement("a", {href: '#followers/' + follower.attributes.xuid + '/videos/', className: "col-sm-6"}, 
-            React.createElement("h1", null, follower.attributes.gamertag)
+        React.createElement("div", {className: "col-sm-6", key: follower.cid}, 
+          React.createElement("a", {onClick: function(){self.props.handleFollower(follower.get('gamertag'))}, href: '#followers/' + follower.attributes.xuid + '/videos/', className: ""}, 
+            React.createElement("h1", null, follower.get('gamertag'))
           ), 
-          React.createElement("button", {onClick: function(){self.props.handleDelete(follower)}, type: "button", className: "btn btn-danger"}, "Delete Follower")
+          React.createElement("button", {onClick: function(){self.props.handleDelete(follower)}, type: "button", className: "follower-delete btn btn-danger"}, "Delete Follower")
         )
     )
     });
@@ -464,17 +467,13 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
       'objectId': objectId
     });
 
-
-    // console.log(follower);
-
-    // this.parseSetup();
     this.xboxSetup();
 
     // ended up having to put the post to parse followers in the then function because it would run that
     //before the request for the xuid was done
     $.ajax('https://xboxapi.com/v2/xuid/' + gamertag, {
       success: function(response){
-        // self.setState({xuid: response});
+
         follower.set('xuid', response);
         self.parseSetup();
 
@@ -482,7 +481,7 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
         self.setState({followerCollection: self.state.followerCollection});
       },
       error: function(){
-        // console.log('error');
+
         self.setState({modalIsOpen: true});
       }
     });
@@ -503,16 +502,22 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
       self.setState({deleteModal: true});
     });
   },
+  handleFollower: function(follower){
+    localStorage.setItem('follower', follower);
+  },
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
         React.createElement(GamertagErrorModal, {modalIsOpen: this.state.modalIsOpen}), 
         React.createElement(UserDeletedErrorModal, {deleteModal: this.state.deleteModal}), 
+        React.createElement("h3", null, "My Followers"), 
+
         React.createElement("button", {className: "add-button btn btn-primary", type: "button", name: "button", onClick: this.handleToggleForm}, "Add Follower"), 
+
         React.createElement("div", {className: ""}, 
             this.state.showForm ? React.createElement(FormComponent, {addfollower: this.addfollower}) : null
         ), 
-        React.createElement(FollowerComponent, {handleDelete: this.handleDelete, followers: this.state.followerCollection})
+        React.createElement(FollowerComponent, {handleFollower: this.handleFollower, handleDelete: this.handleDelete, followers: this.state.followerCollection})
       )
     )
   }
@@ -546,12 +551,12 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
 
     var videos = likeCollection.map(function(video){
       return (
-        React.createElement("div", {key: video.cid, className: ""}, 
+        React.createElement("div", {key: video.cid, className: "liked-videos"}, 
+          React.createElement("h3", {className: "gamertag"}, video.get('gamertag')), 
           React.createElement("h3", null, video.get('title')), 
-          React.createElement("h3", null, video.attributes.gamertag), 
           React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
             React.createElement("li", {className: "videos"}, 
-              React.createElement("video", {src: video.attributes.url, width: "520", height: "440", controls: true})
+              React.createElement("video", {src: video.get('url'), width: "520", height: "440", controls: true})
             )
           ), 
           React.createElement("button", {onClick: function(){self.props.handleDelete(video)}, type: "button", className: "btn btn-danger"}, "Delete Like")
@@ -559,7 +564,11 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
       )
     });
     return (
-      React.createElement("ul", null, videos)
+      React.createElement("div", null, 
+        React.createElement("h3", null, "My Liked Videos"), 
+        React.createElement("ul", null, videos)
+      )
+
     )
   }
 });
@@ -1049,10 +1058,14 @@ var UserComponent = React.createClass({displayName: "UserComponent",
     var uris = collection.page(pageNumber).map(function(video){
       console.log(video);
       return (
-        React.createElement("li", {className: "videos", key: video.cid}, 
-          React.createElement("h3", null, video.attributes.title), 
-          React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true}), 
-          React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info glyphicon glyphicon-heart"})
+        React.createElement("div", {key: video.cid, className: ""}, 
+          React.createElement("h3", null, video.get('title')), 
+          React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
+            React.createElement("li", null, 
+              React.createElement("video", {src: video.get('uri')[0].uri, width: "520", height: "440", controls: true})
+            )
+          ), 
+          React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "btn btn-info"}, "Like This Video!")
         )
       )
     });
@@ -1060,16 +1073,23 @@ var UserComponent = React.createClass({displayName: "UserComponent",
     return (
       React.createElement("div", null, 
         React.createElement("div", null, 
-          React.createElement("h3", null, "Page: ", pageNumber), 
-          React.createElement("ul", {className: "col-sm-6 col-sm-offset-3"}, 
-            uris, 
-          React.createElement("li", null, 
+          React.createElement("h3", null, "My Videos"), 
+          React.createElement("div", {className: "pagenation col-sm-12"}, 
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("h3", null, "Page: ", pageNumber), 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+          ), 
+          React.createElement("div", {className: "video-container"}, 
+            React.createElement("ul", {className: "col-sm-12"}, 
+              uris
+            )
+          ), 
+          React.createElement("div", {className: "pagenation"}, 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("h3", null, "Page: ", pageNumber), 
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
           )
-          )
         )
-
       )
     )
   }
