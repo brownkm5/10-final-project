@@ -30,12 +30,12 @@ var PictureComponent = React.createClass({
 
 var SignupForm = React.createClass({
   getInitialState: function(){
-    var username = '';
+    var name = '';
     var password = '';
     var gamertag = '';
 
     return {
-      username: 'username',
+      name: 'name',
       password: 'password',
       gamertag: 'gamertag'
     }
@@ -61,7 +61,8 @@ var SignupForm = React.createClass({
     file.save().done(() =>{
       $.ajax('https://xboxapi.com/v2/xuid/' + this.state.gamertag).then(function(response){
         var userData = {
-          username: self.state.username,
+          name: self.state.name,
+          username: self.state.gamertag,
           password: self.state.password,
           gamertag: self.state.gamertag,
           xuid: response,
@@ -73,9 +74,9 @@ var SignupForm = React.createClass({
       });
     });
   },
-  handleUsername: function(e){
-    var username = e.target.value;
-    this.setState({username: username});
+  handleName: function(e){
+    var name = e.target.value;
+    this.setState({name: name});
   },
   handlePassword: function(e){
     var password = e.target.value;
@@ -94,8 +95,8 @@ var SignupForm = React.createClass({
     return (
       <form onSubmit={this.handleSignup}>
         <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input onChange={this.handleUsername} type="username" className="form-control" id="username" placeholder="Username" />
+          <label htmlFor="name">Name</label>
+          <input onChange={this.handleName} type="name" className="form-control" id="name" placeholder="Name" />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>

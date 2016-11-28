@@ -89,7 +89,7 @@ var UserComponent = React.createClass({
     var pageNumber = this.state.pageNumber;
     // console.log(collection);
     var uris = collection.page(pageNumber).map(function(video){
-      console.log(video);
+
       return (
         <div key={video.cid} className=''>
           <h3>{video.get('title')}</h3>
@@ -130,16 +130,21 @@ var UserComponent = React.createClass({
 
 var VideosContainer = React.createClass({
   getInitialState: function(){
-    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
-    // console.log(userObjectId);
     return {
-      objectId: userObjectId
+      objectId: ''
     }
   },
   componentWillMount: function(){
+    var self = this;
+    if (!localStorage.getItem('user')) {
+      self.props.router.navigate('user-login/', {trigger: true});
+    }
+
+    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
+    this.setState({objectId: userObjectId});
+
     this.ajaxSetup();
-    // this.getUser();
-    // console.log(this.state.user);
+
   },
   ajaxSetup: function(){
     var userToken = token;
@@ -185,19 +190,19 @@ var VideosContainer = React.createClass({
     });
 
   },
-  getUser: function(){
-    var self = this;
-    //gets userXuid, this is only set up to get my videos, i need to make it so that it takes the xuid and inserts
-    //it into the ajax request
-
-    //! pretty sure i dont need this anymore with the update in my UserComponent to pull the xuid
-    //from localStorage !
-
-    // $.ajax('https://xboxapi.com/v2/profile').then(function(response){
-    //   // console.log('response', response.userXuid);
-    //   self.setState({xuid: response.userXuid});
-    // });
-  },
+  // getUser: function(){
+  //   var self = this;
+  //   //gets userXuid, this is only set up to get my videos, i need to make it so that it takes the xuid and inserts
+  //   //it into the ajax request
+  //
+  //   //! pretty sure i dont need this anymore with the update in my UserComponent to pull the xuid
+  //   //from localStorage !
+  //
+  //   // $.ajax('https://xboxapi.com/v2/profile').then(function(response){
+  //   //   // console.log('response', response.userXuid);
+  //   //   self.setState({xuid: response.userXuid});
+  //   // });
+  // },
   render: function(){
     return (
       <TemplateComponent>

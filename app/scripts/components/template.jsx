@@ -2,19 +2,22 @@ var React = require('react');
 var Backbone = require('backbone');
 
 var TemplateComponent = React.createClass({
+  logout: function(){
+    localStorage.clear();
+  },
   render: function(){
     return(
-      <div className='contain'>
+      <div className='contain-videos'>
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <ul className="nav navbar-nav">
               <li className="videos/"><a href="#videos/">My Videos</a></li>
-              <li className=""><a href="#followers/">My Followers</a></li>
+              <li className=""><a href="#followers/">Following</a></li>
               <li className=""><a href="#likes/">My Likes</a></li>
               <li className="profile"><a href="#profile/">My Profile</a></li>
             </ul>
             <ul className='nav navbar-nav navbar-right'>
-              <li className='sign-out'><a href=''>Sign out</a></li>
+              <li onClick={this.logout} className='sign-out'><a href=''>Sign out</a></li>
             </ul>
           </div>
         </nav>

@@ -32,13 +32,13 @@ var ProfileContainer = React.createClass({
     var objectId = this.state.objectId;
 
     $.ajax('https://kevinbrowntown.herokuapp.com/users/' + objectId).then(function(response){
-      self.setState({username: response.username, gamertag: response.gamertag, profilePic: response.profilePic});
+      self.setState({name: response.name, gamertag: response.gamertag, profilePic: response.profilePic});
     });
 
   },
-  handleUsername: function(e){
+  handleName: function(e){
     var input = e.target.value;
-    this.setState({username: input});
+    this.setState({name: input});
   },
   handleGamertag: function(e){
     var input = e.target.value;
@@ -46,7 +46,7 @@ var ProfileContainer = React.createClass({
   },
   handleUpdate: function(){
     var profileUpdate = {
-      username: this.state.username,
+      name: this.state.name,
       gamertag: this.state.gamertag
     }
     var token = this.state.token;
@@ -55,7 +55,7 @@ var ProfileContainer = React.createClass({
 
     options.url = "https://kevinbrowntown.herokuapp.com/users/xHIIC0Wvtd";
     options.data = {
-      username: this.state.username,
+      name: this.state.name,
       gamertag: this.state.gamertag
     }
 
@@ -91,7 +91,7 @@ var ProfileContainer = React.createClass({
       <TemplateComponent>
         <img src={this.state.profilePic} alt="Profile Picture" />
         <form onSubmit={this.handleUpdate}>
-          <input onChange={this.handleUsername} value={this.state.username}></input>
+          <input onChange={this.handleName} value={this.state.name}></input>
           <input onChange={this.handleGamertag} value={this.state.gamertag}></input>
           <button type="submit" className="btn btn-success">Update Profile</button>
         </form>

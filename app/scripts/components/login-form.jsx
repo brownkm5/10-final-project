@@ -1,6 +1,8 @@
 var React = require('react');
 var Backbone = require('backbone');
 
+var TemplateComponent = require('./welcome-template.jsx');
+
 
 var LoginHeader = React.createClass({
   render: function(){
@@ -14,16 +16,16 @@ var LoginHeader = React.createClass({
 
 var LoginForm = React.createClass({
   getInitialState: function(){
-    var username = '';
+    var gamertag = '';
     var password = '';
     return {
-      username: username,
+      gamertag: gamertag,
       password: password
     }
   },
-  handleUsername:function(e){
-    var username = e.target.value;
-    this.setState({username});
+  handleGamertag:function(e){
+    var gamertag = e.target.value;
+    this.setState({gamertag});
   },
   handlePassword:function(e){
     var password = e.target.value;
@@ -32,24 +34,25 @@ var LoginForm = React.createClass({
   handleSubmit: function(e){
     e.preventDefault();
     var userData = {
-      username: this.state.username,
+      gamertag: this.state.gamertag,
       password: this.state.password
     }
+
     this.props.handleSubmit(userData);
   },
   render: function(){
   var self = this;
   return (
-    <form className='col-sm-5' onSubmit={self.handleSubmit}>
+    <form className='col-sm-8 col-sm-offset-2' onSubmit={self.handleSubmit}>
       <div className="form-group">
-        <label htmlFor="username">Username</label>
-        <input onChange={self.handleUsername} type="username" className="form-control" id="username" placeholder="Username"/>
+        <label htmlFor="username">Gamertag</label>
+        <input onChange={self.handleGamertag} type="username" className="form-control" id="username" placeholder="Gamertag"/>
       </div>
       <div className="form-group">
         <label htmlFor="exampleInputPassword1">Password</label>
         <input onChange={self.handlePassword} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"/>
       </div>
-      <button type="submit" className="btn btn-success">Submit</button>
+      <button type="submit" className="btn btn-success login-button">Submit</button>
     </form>
   )
 }
@@ -72,17 +75,17 @@ var LoginContainer = React.createClass({
     });
   },
   handleSubmit: function(userInfo){
-  var username = userInfo.username;
+  var gamertag = userInfo.gamertag;
   var password = userInfo.password;
   // console.log(userInfo);
   var self = this;
   var url = 'https://kevinbrowntown.herokuapp.com/';
 //i need to set the user and gamertag when logged in to use to get the xuid later on for pulling that gamers videos
-  $.ajax(url + 'login?username=' + username + '&password=' + password).then(function(response){
+  $.ajax(url + 'login?username=' + gamertag + '&password=' + password).then(function(response){
     localStorage.setItem('user', JSON.stringify(response));
     localStorage.setItem('token', response.sessionToken);
+    console.log(response);
 
-    console.log('res', response);
     if (response.sessionToken) {
       self.props.router.navigate('videos/', {trigger: true});
     };
@@ -90,10 +93,12 @@ var LoginContainer = React.createClass({
 },
   render: function(){
     return(
-      <div className='container'>
-        <LoginHeader />
-        <LoginForm handleSubmit={this.handleSubmit}/>
-      </div>
+      <TemplateComponent>
+        <div className="login-container">
+          <LoginHeader />
+          <LoginForm handleSubmit={this.handleSubmit}/>
+        </div>
+      </TemplateComponent>
     )
   }
 });

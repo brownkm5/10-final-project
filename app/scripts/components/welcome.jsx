@@ -49,8 +49,8 @@ var Thumbnails = React.createClass({
         <div className="col-xs-12 col-sm-4 col-md-4">
           <div className="thumbnail">
             <div className="caption">
-              <h3>Create a follower list.</h3>
-              <p>Search for other people's gamertags, and add them to your list of followers for easier access to your friend's saved videos.</p>
+              <h3>Create a following list.</h3>
+              <p>Search for gamertags, and add them to your following list for easier access to your friend's saved videos.</p>
             </div>
           </div>
         </div>
