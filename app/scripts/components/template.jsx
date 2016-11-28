@@ -11,7 +11,10 @@ var TemplateComponent = React.createClass({
               <li className="videos/"><a href="#videos/">My Videos</a></li>
               <li className=""><a href="#followers/">My Followers</a></li>
               <li className=""><a href="#likes/">My Likes</a></li>
-              <li className="profile"><a href="#videos/">My Profile</a></li>
+              <li className="profile"><a href="#profile/">My Profile</a></li>
+            </ul>
+            <ul className='nav navbar-nav navbar-right'>
+              <li className='sign-out'><a href=''>Sign out</a></li>
             </ul>
           </div>
         </nav>
