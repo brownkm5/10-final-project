@@ -792,14 +792,15 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        // if(token){
-        //   xhr.setRequestHeader('X-Parse-Session-Token', token);
-        // }
+        if(token){
+          xhr.setRequestHeader('X-Parse-Session-Token', token);
+        }
       }
     });
   },
   componentWillMount: function(){
-    this.parseSetup();
+
+    this.parseSetup(this.state.token);
 
     var self = this;
     var objectId = this.state.objectId;
@@ -819,26 +820,45 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
   },
   handleUpdate: function(){
     var profileUpdate = {
-      "username": this.state.username,
-      "gamertag": this.state.gamertag
+      username: this.state.username,
+      gamertag: this.state.gamertag
+    }
+    var token = this.state.token;
+
+    var options = {};
+
+    options.url = "https://kevinbrowntown.herokuapp.com/users/xHIIC0Wvtd";
+    options.data = {
+      username: this.state.username,
+      gamertag: this.state.gamertag
     }
 
-    var dataString = "username=" + this.state.username + "&gamertag=" + this.state.gamertag;
-
-    $.ajax({
-      url:"https://kevinbrowntown.herokuapp.com/users/" + this.state.objectId,
-      type: "PUT",
-      dataType: "json",
-      data: dataString,
-      "headers": {
-      "Content-Type": "application/json",
-      "X-Parse-REST-API-Key": "kylesb",
+    options.headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
       "X-Parse-Application-Id": "kmbparse",
-      "X-Parse-Session-Token": this.state.token
-    }})
-    .then(function(response){
+      "X-Parse-REST-API-Key": "kylesb",
+      "X-Parse-Session-Token": token
+    }
+
+    options.method = "PUT";
+
+    $.ajax(options).then(function(response) {
       console.log(response);
     })
+    // $.ajax({
+    //   url:"https://kevinbrowntown.herokuapp.com/users/" + this.state.objectId,
+    //   type: "PUT",
+    //   dataType: "json",
+    //   data: dataString,
+    //   "headers": {
+    //   "Content-Type": "application/json",
+    //   "X-Parse-REST-API-Key": "kylesb",
+    //   "X-Parse-Application-Id": "kmbparse",
+    //   "X-Parse-Session-Token": this.state.token
+    // }})
+    // .then(function(response){
+    //   console.log(response);
+    // })
   },
   render: function(){
     return (
