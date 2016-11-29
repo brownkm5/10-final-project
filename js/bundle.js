@@ -69,11 +69,13 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
 
     var commentCollection = this.state.commentCollection;
 
-    commentCollection.video(this.props.video.clipId).fetch().then(function(){
-      self.setState({commentCollection: commentCollection});
-      // console.log(commentCollection);
-    });
+    function fetchComments(){
+      commentCollection.video(self.props.video.clipId).fetch().then(function(){
+        self.setState({commentCollection: commentCollection});
+      })
+    };
 
+    window.setInterval(fetchComments, 5000);
   },
   handleComment: function(e){
     var comment = e.target.value;
@@ -91,7 +93,12 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
 
     console.log(comment);
 
-    commentCollection.create(comment);
+    commentCollection.create(comment, {
+      success: function(){
+        console.log(commentCollection);
+        self.setState({commentCollection: commentCollection, comment: ''});
+      }
+    });
     //it says .then isnt a function
     // .then(function(){
     //   self.setState({commentCollection: commentCollection});
