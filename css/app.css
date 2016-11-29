@@ -5766,34 +5766,53 @@ button.close {
 .navbar {
   border-radius: 0px; }
 
+.welcome-contain {
+  background-image: url("../images/destiny-background.jpeg");
+  background-size: cover;
+  height: 1075px; }
+
 #signup, #login {
   color: white; }
 
-.thumbnail, .jumbotron, .navbar {
-  background-color: #7030a0;
-  border-color: #7030a0;
+.thumbnail {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(112, 48, 160, 0); }
+  .thumbnail .caption {
+    color: white; }
+
+.jumbotron, .navbar {
+  background-color: transparent;
+  border-color: rgba(112, 48, 160, 0);
   color: white; }
 
 .thumbnail {
   height: 144px; }
 
-.welcome-contain {
-  background-color: black; }
-  .welcome-contain .welcome-page {
-    text-align: center; }
+.welcome-contain .welcome-page {
+  text-align: center; }
+@media (max-width: 768px) {
+  .welcome-contain .nav {
+    text-align: right; }
+    .welcome-contain .nav li {
+      display: inline-block; } }
+.welcome-contain .carousel {
+  margin-bottom: 50px; }
+  .welcome-contain .carousel img {
+    width: 100%;
+    height: 500px; }
   @media (max-width: 768px) {
-    .welcome-contain .nav {
-      text-align: right; }
-      .welcome-contain .nav li {
-        display: inline-block; } }
-  .welcome-contain .carousel {
-    margin-bottom: 50px; }
     .welcome-contain .carousel img {
-      width: 100%;
-      height: 500px; }
-    @media (max-width: 768px) {
-      .welcome-contain .carousel img {
-        height: 300px; } }
+      height: 300px; } }
+
+.login-container {
+  background-color: rgba(0, 0, 0, 0.35);
+  height: 280px;
+  color: white;
+  padding-top: 1px;
+  text-align: center;
+  margin-top: 30px; }
+  .login-container .login-button {
+    width: 100px; }
 
 a, h3 {
   display: inline-block; }
@@ -5827,4 +5846,8 @@ ul {
     width: 150px;
     margin-left: 20vw;
     margin-right: 20vw; }
+
+.sign-out {
+  cursor: pointer; }
+
 /*# sourceMappingURL=app.css.map */
