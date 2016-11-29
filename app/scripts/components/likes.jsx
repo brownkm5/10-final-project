@@ -90,6 +90,7 @@ var LikesContainer = React.createClass({
     var imageFetches = likeCollection.map(function(video){
       return $.ajax("https://xboxapi.com/v2/" + video.attributes.xuid + "/" + "game-clip-details" +  "/" + video.attributes.scid +  "/" + video.attributes.clipId).then(function(response){
         video.set('url', response.gameClipUris[0].uri);
+        // console.log(response.gameClipUris[0].uri);
       });
     });
 
@@ -102,7 +103,7 @@ var LikesContainer = React.createClass({
   handleDelete: function(video){
     this.parseSetup();
     var self = this;
-    console.warn(video);
+    // console.warn(video);
     video.destroy().then(function(){
       self.setState({likeCollection: self.state.likeCollection});
     });

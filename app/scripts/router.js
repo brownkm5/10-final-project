@@ -11,6 +11,7 @@ var FollowerVideos = require('./components/follower-videos.jsx').FollowerVideoCo
 var LikesContainer = require('./components/likes.jsx').LikesContainer;
 var ProfileContainer = require('./components/profile.jsx').ProfileContainer;
 var Users = require('./components/users.jsx').UserContainer;
+var CommentsContainer = require('./components/comments.jsx').VideoCommentsContainer;
 
 var AppRouter = Backbone.Router.extend({
   routes: {
@@ -22,7 +23,8 @@ var AppRouter = Backbone.Router.extend({
     'followers/:id/videos/': 'followerVideos',
     'likes/': 'likes',
     'profile/': 'profile',
-    'users/': 'users'
+    'users/': 'users',
+    'comments/:id/': 'comments'
   },
 
   // initialize: function(){
@@ -77,6 +79,12 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
+  comments: function(){
+    ReactDOM.render(
+      React.createElement(CommentsContainer, {router:this}),
+      document.getElementById('app')
+    );
+  }
   // users: function(){
   //   ReactDOM.render(
   //     React.createElement(UserContainer, {router:this}),

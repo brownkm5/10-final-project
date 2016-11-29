@@ -63,7 +63,10 @@ var UserComponent = React.createClass({
           {title: video.titleName,
           uri: video.gameClipUris,
           recordDate: video.dateRecorded,
-          xuid: video.xuid
+          xuid: video.xuid,
+          clipDetails: video.gameClipDetails,
+          scid: video.scid,
+          clipId: video.gameClipId
         }
         );
       });
@@ -130,18 +133,13 @@ var UserComponent = React.createClass({
 
 var VideosContainer = React.createClass({
   getInitialState: function(){
+    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
+    // console.log(userObjectId);
     return {
-      objectId: ''
+      objectId: userObjectId
     }
   },
   componentWillMount: function(){
-    var self = this;
-    if (!localStorage.getItem('user')) {
-      self.props.router.navigate('user-login/', {trigger: true});
-    }
-
-    var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
-    this.setState({objectId: userObjectId});
 
     this.ajaxSetup();
 
@@ -174,7 +172,9 @@ var VideosContainer = React.createClass({
 
     likeCollection.objectId = objectId;
 
-    likedVideo.set('url', video.get('uri')[0].uri);
+    likedVideo.set('scid', video.attributes.scid);
+    likedVideo.set('xuid', video.attributes.xuid);
+    likedVideo.set('clipId', video.attributes.clipId);
     likedVideo.set('user', {
       '__type': 'Pointer',
       'className': '_User',
@@ -187,6 +187,7 @@ var VideosContainer = React.createClass({
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
+      console.log(likedVideo);
     });
 
   },

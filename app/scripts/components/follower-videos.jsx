@@ -68,7 +68,7 @@ componentWillMount: function(){
     var follower = localStorage.getItem('follower');
 
     var uris = collection.page(pageNumber).map(function(video){
-      console.log(video);
+      // console.log(video);
       return (
         <div key={video.cid} className=''>
           <h3>{video.get('title')}</h3>
@@ -79,6 +79,7 @@ componentWillMount: function(){
             </li>
           </div>
           <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info'>Like This Video!</button>
+          <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='btn btn-warning'>Comments</button>
         </div>
       )
     });
@@ -86,7 +87,7 @@ componentWillMount: function(){
     return (
       <div>
         <div>
-          <h3>Clips saved by {follower}</h3>
+          <h3>Clips saved by {follower}.</h3>
           <div className="pagenation col-sm-12">
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
             <h3>Page: {pageNumber}</h3>
@@ -118,6 +119,19 @@ var FollowerVideoContainer = React.createClass({
     }
   },
 
+  componentWillMount: function(){
+    this.ajaxSetup();
+  },
+
+  ajaxSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', userToken);
+      }
+    });
+  },
+
   parseSetup: function(token){
     $.ajaxSetup({
       beforeSend: function(xhr){
@@ -129,6 +143,7 @@ var FollowerVideoContainer = React.createClass({
       }
     });
   },
+
   handleLike: function(video){
     var self = this;
     this.ajaxSetup();
@@ -153,25 +168,21 @@ var FollowerVideoContainer = React.createClass({
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
-      console.log(likedVideo);
+      // console.log(likedVideo);
     });
+  },
 
+  handleComment: function(video){
+    var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
+
+    localStorage.setItem('video', JSON.stringify(videoData));
+    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
   },
-  componentWillMount: function(){
-    this.ajaxSetup();
-  },
-  ajaxSetup: function(){
-    var userToken = token;
-    $.ajaxSetup({
-      beforeSend: function(xhr){
-        xhr.setRequestHeader('X-Auth', userToken);
-      }
-    });
-  },
+
   render: function(){
     return (
       <TemplateComponent>
-        <VideoComponent user={this.state.user} handleLike={this.handleLike}/>
+        <VideoComponent user={this.state.user} handleComment={this.handleComment} handleLike={this.handleLike}/>
       </TemplateComponent>
     )
   }
