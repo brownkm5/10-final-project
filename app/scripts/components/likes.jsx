@@ -14,8 +14,7 @@ var VideosContainer = React.createClass({
     var videos = likeCollection.map(function(video){
       return (
         <div key={video.cid} className="liked-videos">
-          <h3 className='gamertag'>{video.get('gamertag')}</h3>
-          <h3>{video.get('title')}</h3>
+          <h3 className='gamertag'><span>{video.get('gamertag')}</span>:  <span className='game-title'>{video.get('title')}</span></h3>
           <div className="embed-responsive embed-responsive-16by9">
             <li className='videos'>
               <video src={video.get('url')} width="520" height="440" controls></video>

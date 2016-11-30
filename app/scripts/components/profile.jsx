@@ -71,30 +71,18 @@ var ProfileContainer = React.createClass({
     $.ajax(options).then(function(response) {
       console.log(response);
     })
-    // $.ajax({
-    //   url:"https://kevinbrowntown.herokuapp.com/users/" + this.state.objectId,
-    //   type: "PUT",
-    //   dataType: "json",
-    //   data: dataString,
-    //   "headers": {
-    //   "Content-Type": "application/json",
-    //   "X-Parse-REST-API-Key": "kylesb",
-    //   "X-Parse-Application-Id": "kmbparse",
-    //   "X-Parse-Session-Token": this.state.token
-    // }})
-    // .then(function(response){
-    //   console.log(response);
-    // })
   },
   render: function(){
     return (
       <TemplateComponent>
-        <img src={this.state.profilePic} alt="Profile Picture" />
-        <form onSubmit={this.handleUpdate}>
-          <input onChange={this.handleName} value={this.state.name}></input>
-          <input onChange={this.handleGamertag} value={this.state.gamertag}></input>
-          <button type="submit" className="btn btn-success">Update Profile</button>
-        </form>
+        <div className="friends-wrapper">
+          <img src={this.state.profilePic} alt="Profile Picture" />
+          <form onSubmit={this.handleUpdate}>
+            <input onChange={this.handleName} value={this.state.name}></input>
+            <input onChange={this.handleGamertag} value={this.state.gamertag}></input>
+            <button type="submit" className="btn btn-success">Update Profile</button>
+          </form>
+        </div>
       </TemplateComponent>
     )
   }

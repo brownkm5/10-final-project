@@ -7,6 +7,7 @@ var TemplateComponent = require('./welcome-template.jsx');
 var ReactSlickDemo = React.createClass({
   render: function() {
       const settings = {
+        variableHeight: true,
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,

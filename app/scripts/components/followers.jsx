@@ -41,7 +41,7 @@ var GamertagErrorModal = React.createClass({
   },
   closeModal: function(e) {
     this.setState({modalIsOpen: false});
-    // localStorage.setItem('loggedIn', this.state.username);
+
   },
   render: function(){
     return (
@@ -88,7 +88,7 @@ var UserDeletedErrorModal = React.createClass({
   },
   closeModal: function(e) {
     this.setState({modalIsOpen: false});
-    // localStorage.setItem('loggedIn', this.state.username);
+
   },
   render: function(){
     return (
@@ -155,15 +155,13 @@ var FollowerComponent = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps){
-    // console.log(nextProps.followers);
     this.setState({followers: nextProps.followers});
   },
   render: function(){
     var self = this;
     var followers = this.state.followers;
-    // console.log('map', followers);
+
     var followerList = followers.map(function(follower){
-      // console.log(follower);
       return (
         <div className='col-sm-6' key={follower.cid}>
           <a onClick={function(){self.props.handleFollower(follower.get('gamertag'))}} href={'#followers/' + follower.attributes.xuid + '/videos/'} className='' >
@@ -187,7 +185,7 @@ var FollowersContainer = React.createClass({
   getInitialState: function(){
     var followerCollection = new model.FollowerCollection;
     var objectId = JSON.parse(localStorage.getItem('user')).objectId;
-    // console.log('state', followerCollection);
+
     return {
       followerCollection: followerCollection,
       showForm: false,
@@ -206,14 +204,11 @@ var FollowersContainer = React.createClass({
     });
   },
 
-  parseSetup: function(token){
+  parseSetup: function(){
     $.ajaxSetup({
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        // if(token){
-        //   xhr.setRequestHeader('X-Parse-Session-Token', token);
-        // }
       }
     });
   },
@@ -232,31 +227,7 @@ var FollowersContainer = React.createClass({
       self.setState({followerCollection: followerCollection});
 
     });
-// console.log(followerCollection);
-
-    // var self = this;
-    // var token = localStorage.getItem('token');
-    // var collection = this.state.followerCollection;
-    // var user = JSON.parse(localStorage.getItem('user')).objectId;
-    // console.log(user);
-    // this.setState({user : user});
-
-
-    // console.log(this.state.followerCollection);
-    // this.state.followerCollection.fetch().parseWhere('user', 'User', )
-    // this.setState({followerCollection: this.state.followerCollection});
-    // console.log('state', this.state.followerCollection);
   },
-
-  // componentDidMount: function(){
-  //  var self = this;
-    // var followerCollection = this.state.followerCollection;
-    //
-    //
-    // followerCollection.fetch().then(function(){
-    //   self.setState({followerCollection: followerCollection});
-    // });
-  // },
 
   handleToggleForm: function(e){
     e.preventDefault();

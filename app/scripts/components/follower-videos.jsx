@@ -86,11 +86,11 @@ componentWillMount: function(){
 
     return (
         <div>
-          <h3 className='title'>Clips saved by {follower}.</h3>
+          <h3 className=''>Clips saved by {follower}.</h3>
           <div className="pagenation col-sm-12">
-            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>
             <h3>Page {pageNumber}</h3>
-            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next</button>
           </div>
           <div className='video-container'>
             <ul className='col-sm-12'>
@@ -98,9 +98,9 @@ componentWillMount: function(){
             </ul>
           </div>
           <div className="pagenation">
-            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>
             <h3>Page {pageNumber}</h3>
-            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next</button>
           </div>
         </div>
     )
