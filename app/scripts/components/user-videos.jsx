@@ -112,7 +112,7 @@ var UserComponent = React.createClass({
     return (
       <div className='uservideos-container'>
         <div className='uservideos-title'>
-          <h3>My Videos</h3>
+          <h3 className='title'>My Videos</h3>
         </div>
           <div className="pagenation col-sm-12">
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>

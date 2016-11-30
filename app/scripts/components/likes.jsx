@@ -22,7 +22,7 @@ var VideosContainer = React.createClass({
             </li>
           </div>
           <div className="buttons">
-            <button onClick={function(){self.props.handleDelete(video)}} type='button' className='fa fa-trash-o btn btn-danger'>Delete Like</button>
+            <button onClick={function(){self.props.handleDelete(video)}} type='button' className='fa fa-trash-o btn btn-danger'></button>
             <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment btn btn-warning'></button>
           </div>
         </div>
@@ -30,7 +30,7 @@ var VideosContainer = React.createClass({
     });
     return (
       <div>
-        <h3>My Liked Videos</h3>
+        <h3 className='title'>My Liked Videos</h3>
         <ul>{videos}</ul>
       </div>
 

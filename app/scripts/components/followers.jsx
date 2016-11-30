@@ -138,7 +138,7 @@ var FormComponent = React.createClass({
         <form onSubmit={this.handleAddFollower} className="form-inline col-sm-5 add-follower">
           <label htmlFor='gamertag'>Gamertag</label>
           <input className='form-control' onChange={this.handleGamertag} id='gamertag' placeholder='Gamertag'  type="text" name="name" value={this.state.gamertag} />
-          <button className='btn btn-success' type="submit" name="button">Add Follower</button>
+          <button className='add-follower btn btn-success' type="submit" name="button">Add Follower</button>
         </form>
       </div>
     )
@@ -175,11 +175,9 @@ var FollowerComponent = React.createClass({
     });
 
     return (
-    <div>
       <div>
         {followerList}
       </div>
-    </div>
     )
   }
 });
@@ -321,16 +319,18 @@ var FollowersContainer = React.createClass({
   render: function(){
     return (
       <TemplateComponent>
-        <GamertagErrorModal modalIsOpen={this.state.modalIsOpen}/>
-        <UserDeletedErrorModal deleteModal={this.state.deleteModal} />
-        <h3>My Followers</h3>
+        <div className="friends-wrapper">
+          <GamertagErrorModal modalIsOpen={this.state.modalIsOpen}/>
+          <UserDeletedErrorModal deleteModal={this.state.deleteModal} />
+          <h3 className='title'>My Friends</h3>
 
-        <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
+          <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
 
-        <div className="">
-            {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}
+          <div className="">
+              {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}
+          </div>
+          <FollowerComponent handleFollower={this.handleFollower} handleDelete={this.handleDelete} followers={this.state.followerCollection}/>
         </div>
-        <FollowerComponent handleFollower={this.handleFollower} handleDelete={this.handleDelete} followers={this.state.followerCollection}/>
       </TemplateComponent>
     )
   }

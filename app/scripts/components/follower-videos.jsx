@@ -85,9 +85,8 @@ componentWillMount: function(){
     });
 
     return (
-      <div>
         <div>
-          <h3>Clips saved by {follower}.</h3>
+          <h3 className='title'>Clips saved by {follower}.</h3>
           <div className="pagenation col-sm-12">
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
             <h3>Page {pageNumber}</h3>
@@ -104,7 +103,6 @@ componentWillMount: function(){
             <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
           </div>
         </div>
-      </div>
     )
   }
 });
@@ -182,7 +180,7 @@ var FollowerVideoContainer = React.createClass({
   render: function(){
     return (
       <TemplateComponent>
-        <VideoComponent user={this.state.user} handleComment={this.handleComment} handleLike={this.handleLike}/>
+          <VideoComponent user={this.state.user} handleComment={this.handleComment} handleLike={this.handleLike}/>
       </TemplateComponent>
     )
   }

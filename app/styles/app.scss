@@ -59,10 +59,20 @@ a:hover {
   }
 }
 .mobile-navbar {
+  text-align: center;
+
   li {
     display: block;
+    font-size: 20px;
   }
 }
+@media (min-width:768px) {
+  .friends-wrapper {
+    height: 50vw;
+  }
+}
+
+
 .header {
   text-align: center;
   height: 170px;
@@ -134,13 +144,25 @@ a:hover {
   }
 }
 
-
+label {
+  color: white;
+}
 a, h3 {
   display: inline-block;
 }
 
 ul {
   list-style: none;
+  padding-left: 0px;
+}
+.title {
+  font-size: 34px;
+  display: block;
+}
+@media (max-width:768px) {
+  .add-follower  {
+    display: block;
+  }
 }
 
 
@@ -159,7 +181,7 @@ ul {
 //followers
 .liked-videos {
   .gamertag {
-    margin-right: 360px;
+    // margin-right: 360px;
   }
 }
 .follower-delete {
@@ -180,7 +202,11 @@ ul {
     }
   }
 }
+.liked-videos {
+  h3 {
 
+  }
+}
 .uservideos-title {
   text-align: center;
 }
@@ -191,7 +217,7 @@ ul {
 }
 @media (max-width: 768px) {
   .video-container {
-    height: 2349.23px;
+    height: 2559.23px;
   }
 }
 .pagenation {
