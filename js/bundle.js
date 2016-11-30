@@ -236,11 +236,11 @@ componentWillMount: function(){
 
     return (
         React.createElement("div", null, 
-          React.createElement("h3", {className: "title"}, "Clips saved by ", follower, "."), 
+          React.createElement("h3", {className: ""}, "Clips saved by ", follower, "."), 
           React.createElement("div", {className: "pagenation col-sm-12"}, 
-            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last"), 
             React.createElement("h3", null, "Page ", pageNumber), 
-            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next")
           ), 
           React.createElement("div", {className: "video-container"}, 
             React.createElement("ul", {className: "col-sm-12"}, 
@@ -248,9 +248,9 @@ componentWillMount: function(){
             )
           ), 
           React.createElement("div", {className: "pagenation"}, 
-            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last"), 
             React.createElement("h3", null, "Page ", pageNumber), 
-            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
+            React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next")
           )
         )
     )
@@ -385,7 +385,7 @@ var GamertagErrorModal = React.createClass({displayName: "GamertagErrorModal",
   },
   closeModal: function(e) {
     this.setState({modalIsOpen: false});
-    // localStorage.setItem('loggedIn', this.state.username);
+
   },
   render: function(){
     return (
@@ -432,7 +432,7 @@ var UserDeletedErrorModal = React.createClass({displayName: "UserDeletedErrorMod
   },
   closeModal: function(e) {
     this.setState({modalIsOpen: false});
-    // localStorage.setItem('loggedIn', this.state.username);
+
   },
   render: function(){
     return (
@@ -499,15 +499,13 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
   },
 
   componentWillReceiveProps: function(nextProps){
-    // console.log(nextProps.followers);
     this.setState({followers: nextProps.followers});
   },
   render: function(){
     var self = this;
     var followers = this.state.followers;
-    // console.log('map', followers);
+
     var followerList = followers.map(function(follower){
-      // console.log(follower);
       return (
         React.createElement("div", {className: "col-sm-6", key: follower.cid}, 
           React.createElement("a", {onClick: function(){self.props.handleFollower(follower.get('gamertag'))}, href: '#followers/' + follower.attributes.xuid + '/videos/', className: ""}, 
@@ -531,7 +529,7 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
   getInitialState: function(){
     var followerCollection = new model.FollowerCollection;
     var objectId = JSON.parse(localStorage.getItem('user')).objectId;
-    // console.log('state', followerCollection);
+
     return {
       followerCollection: followerCollection,
       showForm: false,
@@ -550,14 +548,11 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
     });
   },
 
-  parseSetup: function(token){
+  parseSetup: function(){
     $.ajaxSetup({
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        // if(token){
-        //   xhr.setRequestHeader('X-Parse-Session-Token', token);
-        // }
       }
     });
   },
@@ -576,31 +571,7 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
       self.setState({followerCollection: followerCollection});
 
     });
-// console.log(followerCollection);
-
-    // var self = this;
-    // var token = localStorage.getItem('token');
-    // var collection = this.state.followerCollection;
-    // var user = JSON.parse(localStorage.getItem('user')).objectId;
-    // console.log(user);
-    // this.setState({user : user});
-
-
-    // console.log(this.state.followerCollection);
-    // this.state.followerCollection.fetch().parseWhere('user', 'User', )
-    // this.setState({followerCollection: this.state.followerCollection});
-    // console.log('state', this.state.followerCollection);
   },
-
-  // componentDidMount: function(){
-  //  var self = this;
-    // var followerCollection = this.state.followerCollection;
-    //
-    //
-    // followerCollection.fetch().then(function(){
-    //   self.setState({followerCollection: followerCollection});
-    // });
-  // },
 
   handleToggleForm: function(e){
     e.preventDefault();
@@ -702,8 +673,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     var videos = likeCollection.map(function(video){
       return (
         React.createElement("div", {key: video.cid, className: "liked-videos"}, 
-          React.createElement("h3", {className: "gamertag"}, video.get('gamertag')), 
-          React.createElement("h3", null, video.get('title')), 
+          React.createElement("h3", {className: "gamertag"}, React.createElement("span", null, video.get('gamertag')), ":  ", React.createElement("span", {className: "game-title"}, video.get('title'))), 
           React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
             React.createElement("li", {className: "videos"}, 
               React.createElement("video", {src: video.get('url'), width: "520", height: "440", controls: true})
@@ -1000,29 +970,17 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
     $.ajax(options).then(function(response) {
       console.log(response);
     })
-    // $.ajax({
-    //   url:"https://kevinbrowntown.herokuapp.com/users/" + this.state.objectId,
-    //   type: "PUT",
-    //   dataType: "json",
-    //   data: dataString,
-    //   "headers": {
-    //   "Content-Type": "application/json",
-    //   "X-Parse-REST-API-Key": "kylesb",
-    //   "X-Parse-Application-Id": "kmbparse",
-    //   "X-Parse-Session-Token": this.state.token
-    // }})
-    // .then(function(response){
-    //   console.log(response);
-    // })
   },
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
-        React.createElement("img", {src: this.state.profilePic, alt: "Profile Picture"}), 
-        React.createElement("form", {onSubmit: this.handleUpdate}, 
-          React.createElement("input", {onChange: this.handleName, value: this.state.name}), 
-          React.createElement("input", {onChange: this.handleGamertag, value: this.state.gamertag}), 
-          React.createElement("button", {type: "submit", className: "btn btn-success"}, "Update Profile")
+        React.createElement("div", {className: "friends-wrapper"}, 
+          React.createElement("img", {src: this.state.profilePic, alt: "Profile Picture"}), 
+          React.createElement("form", {onSubmit: this.handleUpdate}, 
+            React.createElement("input", {onChange: this.handleName, value: this.state.name}), 
+            React.createElement("input", {onChange: this.handleGamertag, value: this.state.gamertag}), 
+            React.createElement("button", {type: "submit", className: "btn btn-success"}, "Update Profile")
+          )
         )
       )
     )
@@ -1548,6 +1506,7 @@ var TemplateComponent = require('./welcome-template.jsx');
 var ReactSlickDemo = React.createClass({displayName: "ReactSlickDemo",
   render: function() {
       const settings = {
+        variableHeight: true,
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,

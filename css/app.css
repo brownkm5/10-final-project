@@ -5772,12 +5772,21 @@ button.close {
 a:hover {
   color: white; }
 
+.nav {
+  text-transform: uppercase;
+  font-weight: 500;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.4); }
+
 .welcome-contain {
   background-image: url("../images/destiny-background.jpeg");
   background-size: cover;
-  height: 1075px;
+  min-height: 1075px;
   text-align: center; }
 
+@media (max-width: 768px) {
+  .welcome-contain {
+    background-size: cover;
+    background-position: center; } }
 #signup, #login {
   color: white; }
 
@@ -5809,10 +5818,15 @@ a:hover {
 @media (min-width: 768px) {
   .friends-wrapper {
     height: 50vw; } }
+.game-title {
+  margin-left: 2px;
+  text-decoration: underline; }
+
 .header {
   text-align: center;
   height: 170px;
-  background-color: rgba(0, 0, 0, 0.3);
+  font-weight: 300;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   margin-bottom: 30px;
   border-radius: 4px; }
   .header h1 {
@@ -5897,12 +5911,12 @@ ul {
   text-align: center; }
 
 .video-container {
-  height: 5010.17px;
+  min-height: 5010.17px;
   margin-bottom: 30px; }
 
 @media (max-width: 768px) {
   .video-container {
-    height: 2559.23px; } }
+    min-height: 2059.23px; } }
 .pagenation {
   text-align: center;
   margin-bottom: 30px; }
