@@ -5800,9 +5800,15 @@ a:hover {
     text-align: right; }
     .nav li {
       display: inline-block; } }
-.mobile-navbar li {
-  display: block; }
+.mobile-navbar {
+  text-align: center; }
+  .mobile-navbar li {
+    display: block;
+    font-size: 20px; }
 
+@media (min-width: 768px) {
+  .friends-wrapper {
+    height: 50vw; } }
 .header {
   text-align: center;
   height: 170px;
@@ -5851,12 +5857,23 @@ a:hover {
   .signup-container button {
     width: 100px; }
 
+label {
+  color: white; }
+
 a, h3 {
   display: inline-block; }
 
 ul {
-  list-style: none; }
+  list-style: none;
+  padding-left: 0px; }
 
+.title {
+  font-size: 34px;
+  display: block; }
+
+@media (max-width: 768px) {
+  .add-follower {
+    display: block; } }
 .videos {
   margin-bottom: 55px; }
 
@@ -5865,9 +5882,6 @@ ul {
   .body-modal button {
     width: 100px;
     font-size: 18px; }
-
-.liked-videos .gamertag {
-  margin-right: 360px; }
 
 .follower-delete {
   display: block; }
@@ -5888,7 +5902,7 @@ ul {
 
 @media (max-width: 768px) {
   .video-container {
-    height: 2349.23px; } }
+    height: 2559.23px; } }
 .pagenation {
   text-align: center;
   margin-bottom: 30px; }

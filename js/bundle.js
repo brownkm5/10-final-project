@@ -235,9 +235,8 @@ componentWillMount: function(){
     });
 
     return (
-      React.createElement("div", null, 
         React.createElement("div", null, 
-          React.createElement("h3", null, "Clips saved by ", follower, "."), 
+          React.createElement("h3", {className: "title"}, "Clips saved by ", follower, "."), 
           React.createElement("div", {className: "pagenation col-sm-12"}, 
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last Page"), 
             React.createElement("h3", null, "Page ", pageNumber), 
@@ -254,7 +253,6 @@ componentWillMount: function(){
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next Page")
           )
         )
-      )
     )
   }
 });
@@ -332,7 +330,7 @@ var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoConta
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
-        React.createElement(VideoComponent, {user: this.state.user, handleComment: this.handleComment, handleLike: this.handleLike})
+          React.createElement(VideoComponent, {user: this.state.user, handleComment: this.handleComment, handleLike: this.handleLike})
       )
     )
   }
@@ -484,7 +482,7 @@ var FormComponent = React.createClass({displayName: "FormComponent",
         React.createElement("form", {onSubmit: this.handleAddFollower, className: "form-inline col-sm-5 add-follower"}, 
           React.createElement("label", {htmlFor: "gamertag"}, "Gamertag"), 
           React.createElement("input", {className: "form-control", onChange: this.handleGamertag, id: "gamertag", placeholder: "Gamertag", type: "text", name: "name", value: this.state.gamertag}), 
-          React.createElement("button", {className: "btn btn-success", type: "submit", name: "button"}, "Add Follower")
+          React.createElement("button", {className: "add-follower btn btn-success", type: "submit", name: "button"}, "Add Follower")
         )
       )
     )
@@ -521,11 +519,9 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
     });
 
     return (
-    React.createElement("div", null, 
       React.createElement("div", null, 
         followerList
       )
-    )
     )
   }
 });
@@ -667,16 +663,18 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
-        React.createElement(GamertagErrorModal, {modalIsOpen: this.state.modalIsOpen}), 
-        React.createElement(UserDeletedErrorModal, {deleteModal: this.state.deleteModal}), 
-        React.createElement("h3", null, "My Followers"), 
+        React.createElement("div", {className: "friends-wrapper"}, 
+          React.createElement(GamertagErrorModal, {modalIsOpen: this.state.modalIsOpen}), 
+          React.createElement(UserDeletedErrorModal, {deleteModal: this.state.deleteModal}), 
+          React.createElement("h3", {className: "title"}, "My Friends"), 
 
-        React.createElement("button", {className: "add-button btn btn-primary", type: "button", name: "button", onClick: this.handleToggleForm}, "Add Follower"), 
+          React.createElement("button", {className: "add-button btn btn-primary", type: "button", name: "button", onClick: this.handleToggleForm}, "Add Follower"), 
 
-        React.createElement("div", {className: ""}, 
-            this.state.showForm ? React.createElement(FormComponent, {addfollower: this.addfollower}) : null
-        ), 
-        React.createElement(FollowerComponent, {handleFollower: this.handleFollower, handleDelete: this.handleDelete, followers: this.state.followerCollection})
+          React.createElement("div", {className: ""}, 
+              this.state.showForm ? React.createElement(FormComponent, {addfollower: this.addfollower}) : null
+          ), 
+          React.createElement(FollowerComponent, {handleFollower: this.handleFollower, handleDelete: this.handleDelete, followers: this.state.followerCollection})
+        )
       )
     )
   }
@@ -712,7 +710,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
             )
           ), 
           React.createElement("div", {className: "buttons"}, 
-            React.createElement("button", {onClick: function(){self.props.handleDelete(video)}, type: "button", className: "fa fa-trash-o btn btn-danger"}, "Delete Like"), 
+            React.createElement("button", {onClick: function(){self.props.handleDelete(video)}, type: "button", className: "fa fa-trash-o btn btn-danger"}), 
             React.createElement("button", {onClick: function(){self.props.handleComment(video)}, type: "button", name: "button", className: "fa fa-comment btn btn-warning"})
           )
         )
@@ -720,7 +718,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     });
     return (
       React.createElement("div", null, 
-        React.createElement("h3", null, "My Liked Videos"), 
+        React.createElement("h3", {className: "title"}, "My Liked Videos"), 
         React.createElement("ul", null, videos)
       )
 
@@ -1381,7 +1379,7 @@ var UserComponent = React.createClass({displayName: "UserComponent",
     return (
       React.createElement("div", {className: "uservideos-container"}, 
         React.createElement("div", {className: "uservideos-title"}, 
-          React.createElement("h3", null, "My Videos")
+          React.createElement("h3", {className: "title"}, "My Videos")
         ), 
           React.createElement("div", {className: "pagenation col-sm-12"}, 
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageLast}, "Last"), 
