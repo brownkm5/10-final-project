@@ -4,6 +4,8 @@ var Backbone = require('backbone');
 var token = require('../../../key.js').token;
 var FileModel = require('../models/file.js').File;
 
+var TemplateComponent = require('./welcome-template.jsx');
+
 var SignupHeader = React.createClass({
   render: function(){
     return (
@@ -93,7 +95,7 @@ var SignupForm = React.createClass({
   },
   render: function(){
     return (
-      <form onSubmit={this.handleSignup}>
+      <form id='signup-form' className='signup-form col-sm-8 col-sm-offset-2' onSubmit={this.handleSignup}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input onChange={this.handleName} type="name" className="form-control" id="name" placeholder="Name" />
@@ -106,7 +108,10 @@ var SignupForm = React.createClass({
           <label htmlFor="gamertag">Gamertag</label>
           <input onChange={this.handleGamertag} type="text" className="form-control" id="gamertag" placeholder="Gamertag" />
         </div>
+        <div className="form-group">
+        <label htmlFor="inputFile">Profile Picture</label>
         <input id='inputFile' type="file" />
+        </div>
         <button type="submit" className="btn btn-success">Sign Up</button>
       </form>
     )
@@ -137,15 +142,17 @@ var SignupContainer = React.createClass({
   },
   render: function(){
     return (
-      <div>
-        <div className='col-sm-12'>
-          <SignupHeader />
-        </div>
-        <div className='col-sm-5'>
-          <SignupForm handleSignup={this.handleSignup}/>
-          <PictureComponent />
-        </div>
-      </div>
+        <TemplateComponent >
+          <div className='signup-container'>
+            <div className='col-sm-12'>
+              <SignupHeader />
+            </div>
+            <div>
+              <SignupForm handleSignup={this.handleSignup}/>
+              <PictureComponent />
+            </div>
+          </div>
+        </TemplateComponent>
     )
   }
 });

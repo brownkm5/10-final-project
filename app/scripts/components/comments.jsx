@@ -11,14 +11,17 @@ var VideoContainer = React.createClass({
     var url = "https://xboxapi.com/v2/" + this.props.video.xuid + "/" + "game-clip-details" +  "/" + this.props.video.scid +  "/" + this.props.video.clipId;
     console.log(url);
     return {
-      url: url
+      url: url,
+      videoOwner: ''
     }
   },
   componentWillMount: function(){
     this.ajaxSetup();
 
     var self = this;
-
+    $.ajax('https://xboxapi.com/v2/gamertag/' + this.props.video.xuid).then(function(response){
+      self.setState({videoOwner: response});
+    });
     var url = this.state.url;
     $.ajax(url).then(function(response){
       self.setState({videoUrl: response.gameClipUris[0].uri});
@@ -36,7 +39,7 @@ var VideoContainer = React.createClass({
 
     return (
       <div>
-        <h3>User</h3>
+        <h3>{this.state.videoOwner}</h3>
         <h3>{this.props.video.title}</h3>
         <div className="embed-responsive embed-responsive-16by9">
         <video src={this.state.videoUrl} width="520" height="440" controls></video>

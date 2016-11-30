@@ -13,14 +13,14 @@ var ReactSlickDemo = React.createClass({
         autoplay: true,
         autoplaySpeed: 4000,
         fade: true,
-        arrows: true,
         pauseOnHover: true
       };
       return (
         <div className='carousel'>
 
           <Slider {...settings} className=''>
-              <div><img src='https://i3.wallpaperscraft.com/image/destiny_rise_of_iron_character_wolves_109702_2560x1080.jpg' /></div>
+                <div><img src='images/jumbotron.png' /></div>
+                <div><img src='https://i3.wallpaperscraft.com/image/destiny_rise_of_iron_character_wolves_109702_2560x1080.jpg' /></div>
                 <div><img src='https://charlieintel.com/wp-content/uploads/2016/05/image-13.jpeg' /></div>
                 <div><img src='http://compass.xboxlive.com/assets/1c/c9/1cc92786-77f4-4587-9de0-23fdc0082d16.jpg?n=Forza6_E3_PressKit_01.jpg' /></div>
                 <div><img src='https://images7.alphacoders.com/423/thumb-1920-423190.jpg' /></div>
@@ -49,7 +49,7 @@ var Thumbnails = React.createClass({
         <div className="col-xs-12 col-sm-4 col-md-4">
           <div className="thumbnail">
             <div className="caption">
-              <h3>Create a following list.</h3>
+              <h3>Find your friends.</h3>
               <p>Search for gamertags, and add them to your following list for easier access to your friend's saved videos.</p>
             </div>
           </div>
@@ -67,45 +67,13 @@ var Thumbnails = React.createClass({
   }
 });
 
-
-var WelcomeHeader = React.createClass({
-  render: function(){
-    return (
-        <div className="wh-wrapper">
-          <h1>Welcome!</h1>
-          <h2>Please log in or sign up for an account.</h2>
-        </div>
-    )
-  }
-});
-
-
-// var WelcomeButtons = React.createClass({
-//   handleLogin: function(){
-//     this.props.router.navigate('user-login/', {trigger:true});
-//   },
-//   handleSignup: function(){
-//       this.props.router.navigate('user-signup/', {trigger:true});
-//   },
-//   render: function(){
-//     return (
-//       <form className='form-group'>
-//         <button onClick={this.handleLogin} className="btn btn-success" type="button" name="button">Log In</button>
-//         <button onClick={this.handleSignup} className="btn btn-primary" type="button" name="button">Sign Up</button>
-//       </form>
-//     )
-//   }
-          // <WelcomeButtons router={this.props.router}/>
-// });
-
 var WelcomeContainer = React.createClass({
   render: function(){
     return (
     <TemplateComponent>
-      <div className='jumbotron'>
-        <div className="welcome-page">
-          <WelcomeHeader />
-        </div>
+      <div className="header">
+        <h1>SnapShot</h1>
+        <h3>An app to view video clips recorded on Xbox.</h3>
       </div>
       <div className='carousel slide'>
         <ReactSlickDemo />

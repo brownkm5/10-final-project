@@ -53,7 +53,7 @@ var ProfileContainer = React.createClass({
 
     var options = {};
 
-    options.url = "https://kevinbrowntown.herokuapp.com/users/xHIIC0Wvtd";
+    options.url = "https://kevinbrowntown.herokuapp.com/users/" + this.state.objectId;
     options.data = {
       name: this.state.name,
       gamertag: this.state.gamertag

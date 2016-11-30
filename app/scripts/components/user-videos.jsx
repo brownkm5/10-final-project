@@ -94,26 +94,30 @@ var UserComponent = React.createClass({
     var uris = collection.page(pageNumber).map(function(video){
 
       return (
-        <div key={video.cid} className=''>
+        <div key={video.cid} className='video'>
           <h3>{video.get('title')}</h3>
           <div className="embed-responsive embed-responsive-16by9">
             <li>
               <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
             </li>
           </div>
-          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info'>Like This Video!</button>
+        <div className="buttons">
+          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='fa fa-thumbs-up like-button btn btn-info'></button>
+          <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment comment-button btn btn-warning'></button>
+        </div>
         </div>
       )
     });
 
     return (
-      <div>
-        <div>
+      <div className='uservideos-container'>
+        <div className='uservideos-title'>
           <h3>My Videos</h3>
+        </div>
           <div className="pagenation col-sm-12">
-            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
-            <h3>Page: {pageNumber}</h3>
-            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>
+            <h3>Page {pageNumber}</h3>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next</button>
           </div>
           <div className='video-container'>
             <ul className='col-sm-12'>
@@ -121,12 +125,11 @@ var UserComponent = React.createClass({
             </ul>
           </div>
           <div className="pagenation">
-            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
-            <h3>Page: {pageNumber}</h3>
-            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>
+            <h3>Page {pageNumber}</h3>
+            <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next</button>
           </div>
         </div>
-      </div>
     )
   }
 });
@@ -189,7 +192,13 @@ var VideosContainer = React.createClass({
       likeCollection.create(likedVideo);
       console.log(likedVideo);
     });
+  },
 
+  handleComment: function(video){
+    var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
+
+    localStorage.setItem('video', JSON.stringify(videoData));
+    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
   },
   // getUser: function(){
   //   var self = this;
@@ -207,7 +216,7 @@ var VideosContainer = React.createClass({
   render: function(){
     return (
       <TemplateComponent>
-        <UserComponent handleLike={this.handleLike}/>
+        <UserComponent handleComment={this.handleComment} handleLike={this.handleLike}/>
       </TemplateComponent>
     )
   }

@@ -11,9 +11,14 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 *::after {
   box-sizing: border-box;
 }
-
+.fa {
+  font-size: 15px;
+}
 .navbar {
   border-radius: 0px;
+}
+a:hover {
+  color: white;
 }
 
 //welcome page
@@ -21,6 +26,7 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
   background-image: url('../images/destiny-background.jpeg');
   background-size: cover;
   height: 1075px;
+  text-align: center;
 }
 
 #signup, #login {
@@ -43,21 +49,47 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 .thumbnail {
   height: 144px;
 }
+//nav bar on templates
+@media (max-width: 768px) {
+  .nav {
+    text-align: right;
+    li {
+      display: inline-block;
+    }
+  }
+}
+.mobile-navbar {
+  li {
+    display: block;
+  }
+}
+.header {
+  text-align: center;
+  height: 170px;
+  background-color: rgba(0, 0, 0, .3);
+  margin-bottom: 30px;
+  border-radius: 4px;
 
+  h1{
+    padding-top: 15px;
+    font-size: 52px;
+    color: white;
+  }
+  h3 {
+    font-size: 30px;
+    color: white;
+  }
+}
+.logo{
+  height: 30px;
+}
 .welcome-contain{
   // background-color: black;
 
   .welcome-page {
     text-align: center;
   }
-  @media (max-width: 768px) {
-    .nav {
-      text-align: right;
-      li {
-        display: inline-block;
-      }
-    }
-  }
+
 
   .carousel{
     margin-bottom: 50px;
@@ -84,6 +116,20 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
   text-align: center;
   margin-top: 30px;
   .login-button{
+    width: 100px;
+  }
+
+}
+
+//sign up form
+.signup-container {
+  background-color: rgba(0, 0, 0, .35);
+  height: 410px;
+  color: white;
+  padding-top: 1px;
+  text-align: center;
+  margin-top: 30px;
+  button{
     width: 100px;
   }
 }
@@ -121,21 +167,50 @@ ul {
 }
 
 //uservideos
+.contain-videos {
+  background-color: rgb(23,	47,	81);
+  h3 {
+    color: white;
+  }
+  .navbar-nav {
+    li{
+      a {
+        color: white;
+      }
+    }
+  }
+}
+
+.uservideos-title {
+  text-align: center;
+}
+
 .video-container {
   height: 5010.17px;
   margin-bottom: 30px;
+}
+@media (max-width: 768px) {
+  .video-container {
+    height: 2349.23px;
+  }
 }
 .pagenation {
   text-align: center;
   margin-bottom: 30px;
 
   h3 {
-    width: 150px;
-    margin-left: 20vw;
-    margin-right: 20vw;
+
+    margin-left: 5%;
+    margin-right: 5%;
   }
 }
 
 .sign-out {
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 20px;
+  }
 }

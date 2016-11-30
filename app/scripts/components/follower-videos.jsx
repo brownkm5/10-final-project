@@ -78,8 +78,8 @@ componentWillMount: function(){
               <video src={video.get('uri')[0].uri} width="520" height="440" controls></video>
             </li>
           </div>
-          <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='btn btn-info'>Like This Video!</button>
-          <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='btn btn-warning'>Comments</button>
+            <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='fa fa-thumbs-up like-button btn btn-info'></button>
+            <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment btn btn-warning'></button>
         </div>
       )
     });
@@ -90,7 +90,7 @@ componentWillMount: function(){
           <h3>Clips saved by {follower}.</h3>
           <div className="pagenation col-sm-12">
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
-            <h3>Page: {pageNumber}</h3>
+            <h3>Page {pageNumber}</h3>
             <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
           </div>
           <div className='video-container'>
@@ -100,7 +100,7 @@ componentWillMount: function(){
           </div>
           <div className="pagenation">
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last Page</button>
-            <h3>Page: {pageNumber}</h3>
+            <h3>Page {pageNumber}</h3>
             <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next Page</button>
           </div>
         </div>

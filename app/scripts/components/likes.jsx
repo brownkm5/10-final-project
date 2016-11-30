@@ -7,13 +7,6 @@ var model = require('../models/likes.js');
 var TemplateComponent = require('./template.jsx');
 
 var VideosContainer = React.createClass({
-  // getInitialState: function(){
-  //   var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
-  //   return {
-  //     likeCollection: this.props.likeCollection,
-  //     objectId: userObjectId
-  //   }
-  // },
   render: function(){
     var self = this;
     var likeCollection = this.props.likeCollection;
@@ -28,7 +21,10 @@ var VideosContainer = React.createClass({
               <video src={video.get('url')} width="520" height="440" controls></video>
             </li>
           </div>
-          <button onClick={function(){self.props.handleDelete(video)}} type='button' className='btn btn-danger'>Delete Like</button>
+          <div className="buttons">
+            <button onClick={function(){self.props.handleDelete(video)}} type='button' className='fa fa-trash-o btn btn-danger'>Delete Like</button>
+            <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment btn btn-warning'></button>
+          </div>
         </div>
       )
     });
@@ -107,23 +103,19 @@ var LikesContainer = React.createClass({
     video.destroy().then(function(){
       self.setState({likeCollection: self.state.likeCollection});
     });
-    // console.log(this.state.likeCollection);
-    // var self = this;
-    //
-    // var objectId = video.attributes.objectId;
-    // var likeCollection = this.state.likeCollection;
-    //
-    // var options = {'url':'https:kevinbrowntown.herokuapp.com/classes/Likes/' + objectId, 'method': 'DELETE'};
-    // $.ajax(options).success(function(){
-    //   likeCollection.fetch().then(function(){
-    //     self.setState({likeCollection: likeCollection});
-    //   });
-    // })
   },
+
+  handleComment: function(video){
+    var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
+
+    localStorage.setItem('video', JSON.stringify(videoData));
+    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+  },
+
   render: function(){
     return (
       <TemplateComponent>
-        <VideosContainer likeCollection={this.state.likeCollection} handleDelete={this.handleDelete}/>
+        <VideosContainer handleComment={this.handleComment} likeCollection={this.state.likeCollection} handleDelete={this.handleDelete}/>
       </TemplateComponent>
     )
   }
