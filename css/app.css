@@ -5763,13 +5763,20 @@ button.close {
 *::after {
   box-sizing: border-box; }
 
+.fa {
+  font-size: 15px; }
+
 .navbar {
   border-radius: 0px; }
+
+a:hover {
+  color: white; }
 
 .welcome-contain {
   background-image: url("../images/destiny-background.jpeg");
   background-size: cover;
-  height: 1075px; }
+  height: 1075px;
+  text-align: center; }
 
 #signup, #login {
   color: white; }
@@ -5788,13 +5795,33 @@ button.close {
 .thumbnail {
   height: 144px; }
 
+@media (max-width: 768px) {
+  .nav {
+    text-align: right; }
+    .nav li {
+      display: inline-block; } }
+.mobile-navbar li {
+  display: block; }
+
+.header {
+  text-align: center;
+  height: 170px;
+  background-color: rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+  border-radius: 4px; }
+  .header h1 {
+    padding-top: 15px;
+    font-size: 52px;
+    color: white; }
+  .header h3 {
+    font-size: 30px;
+    color: white; }
+
+.logo {
+  height: 30px; }
+
 .welcome-contain .welcome-page {
   text-align: center; }
-@media (max-width: 768px) {
-  .welcome-contain .nav {
-    text-align: right; }
-    .welcome-contain .nav li {
-      display: inline-block; } }
 .welcome-contain .carousel {
   margin-bottom: 50px; }
   .welcome-contain .carousel img {
@@ -5812,6 +5839,16 @@ button.close {
   text-align: center;
   margin-top: 30px; }
   .login-container .login-button {
+    width: 100px; }
+
+.signup-container {
+  background-color: rgba(0, 0, 0, 0.35);
+  height: 410px;
+  color: white;
+  padding-top: 1px;
+  text-align: center;
+  margin-top: 30px; }
+  .signup-container button {
     width: 100px; }
 
 a, h3 {
@@ -5835,18 +5872,35 @@ ul {
 .follower-delete {
   display: block; }
 
+.contain-videos {
+  background-color: #172f51; }
+  .contain-videos h3 {
+    color: white; }
+  .contain-videos .navbar-nav li a {
+    color: white; }
+
+.uservideos-title {
+  text-align: center; }
+
 .video-container {
   height: 5010.17px;
   margin-bottom: 30px; }
 
+@media (max-width: 768px) {
+  .video-container {
+    height: 2349.23px; } }
 .pagenation {
   text-align: center;
   margin-bottom: 30px; }
   .pagenation h3 {
-    width: 150px;
-    margin-left: 20vw;
-    margin-right: 20vw; }
+    margin-left: 5%;
+    margin-right: 5%; }
 
 .sign-out {
   cursor: pointer; }
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 20px; } }
+
 /*# sourceMappingURL=app.css.map */
