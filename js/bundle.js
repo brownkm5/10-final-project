@@ -114,10 +114,13 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
     })
     return (
       React.createElement("div", {className: "comment-holder"}, 
+        React.createElement("p", {className: "comment-title"}, "Comments:"), 
         React.createElement("h3", null, comments), 
         React.createElement("form", {onSubmit: this.handleSubmit}, 
-          React.createElement("input", {onChange: this.handleComment, type: "text", name: "", value: this.state.comment}), 
-          React.createElement("button", {type: "submit", name: "button"}, "Comment")
+          React.createElement("div", {className: "form-group col-sm-4"}, 
+            React.createElement("input", {className: "form-control", onChange: this.handleComment, type: "text", name: "", value: this.state.comment})
+          ), 
+          React.createElement("button", {className: "btn btn-success", type: "submit", name: "button"}, "Comment")
         )
       )
 
@@ -617,18 +620,16 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
 
     var followerCollection = this.state.followerCollection;
     var objectId = follower.attributes.objectId;
-    follower.destroy().then(function(){
-      self.setState({followerCollection: self.state.followerCollection});
+
+    var options = {'url':'https://kevinbrowntown.herokuapp.com/classes/Followers/' + objectId, 'method': 'DELETE'};
+    $.ajax(options).success(function(){
+      //updates the page to show the user has been deleted
+      followerCollection.fetch().then(function(){
+        self.setState({followerCollection: self.state.followerCollection});
+      });
+    }).error(function(){
+      self.setState({deleteModal: true});
     });
-    // var options = {'url':'https://kevinbrowntown.herokuapp.com/classes/Followers/' + objectId, 'method': 'DELETE'};
-    // $.ajax(options).success(function(){
-    //   //updates the page to show the user has been deleted
-    //   followerCollection.fetch().then(function(){
-    //     self.setState({followerCollection: self.state.followerCollection});
-    //   });
-    // }).error(function(){
-    //   self.setState({deleteModal: true});
-    // });
   },
   handleFollower: function(follower){
     localStorage.setItem('follower', follower);

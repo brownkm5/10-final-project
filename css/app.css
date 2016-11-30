@@ -5894,6 +5894,11 @@ ul {
 @media (max-width: 768px) {
   .add-follower {
     display: block; } }
+.comment-title {
+  font-size: 28px;
+  color: white;
+  text-decoration: underline; }
+
 .videos {
   margin-bottom: 55px; }
 
@@ -5902,6 +5907,9 @@ ul {
   .body-modal button {
     width: 100px;
     font-size: 18px; }
+
+.liked-videos {
+  min-height: 500px; }
 
 .follower-delete {
   display: block; }
@@ -5942,4 +5950,5 @@ ul {
   margin-bottom: 10px;
   margin-left: 15px;
   border-radius: 3px; }
+
 /*# sourceMappingURL=app.css.map */
