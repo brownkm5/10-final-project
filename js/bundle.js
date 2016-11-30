@@ -852,14 +852,11 @@ var LoginContainer = React.createClass({displayName: "LoginContainer",
     var token = localStorage.getItem('token');
     this.ajaxSetup(token);
   },
-  ajaxSetup: function(token){
+  ajaxSetup: function(toen){
     $.ajaxSetup({
       beforeSend: function(xhr){
         xhr.setRequestHeader('X-Parse-Application-Id', 'kmbparse');
         xhr.setRequestHeader('X-Parse-REST-API-Key', 'kylesb');
-        if(token){
-          xhr.setRequestHeader('X-Parse-Session-Token', token);
-        }
       }
     });
   },
