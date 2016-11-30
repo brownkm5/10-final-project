@@ -76,12 +76,25 @@ var ProfileContainer = React.createClass({
     return (
       <TemplateComponent>
         <div className="friends-wrapper">
-          <img src={this.state.profilePic} alt="Profile Picture" />
-          <form onSubmit={this.handleUpdate}>
-            <input onChange={this.handleName} value={this.state.name}></input>
-            <input onChange={this.handleGamertag} value={this.state.gamertag}></input>
-            <button type="submit" className="btn btn-success">Update Profile</button>
-          </form>
+        <div className="row">
+          <h3 className='title'>My Profile</h3>
+        </div>
+          <div className="row">
+            <img className='profile-image' src={this.state.profilePic} alt="Profile Picture" />
+          </div>
+          <div className="row">
+            <form className='update-profile form-group col-sm-4' onSubmit={this.handleUpdate}>
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input id='name' className='form-control' onChange={this.handleName} value={this.state.name}></input>
+              </div>
+              <div className="form-group">
+                <label htmlFor="gamertag">Gamertag</label>
+                <input id='gamertag' className='form-control' onChange={this.handleGamertag} value={this.state.gamertag}></input>
+              </div>
+              <button type="submit" className="btn btn-success">Update Profile</button>
+            </form>
+          </div>
         </div>
       </TemplateComponent>
     )

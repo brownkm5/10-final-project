@@ -105,7 +105,7 @@ a:hover {
   }
 }
 .logo{
-  height: 30px;
+  height: 35px;
 }
 .welcome-contain{
   // background-color: black;
@@ -128,7 +128,17 @@ a:hover {
       }
     }
   }
+}
+@media (min-width:768px) {
+  .like-button {
+    margin-right: 80vw;
+  }
+}
 
+@media (max-width: 768px) {
+  .like-button {
+    margin-right: 58vw;
+  }
 }
 
 //login form
@@ -249,4 +259,13 @@ ul {
   h3 {
     font-size: 20px;
   }
+}
+
+//profile page
+.profile-image {
+  height: 325px;
+  width: 300px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+  border-radius: 3px;
 }

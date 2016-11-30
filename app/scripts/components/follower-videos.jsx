@@ -79,7 +79,7 @@ componentWillMount: function(){
             </li>
           </div>
             <button onClick={function(){self.props.handleLike(video)}} type="button" name="button" className='fa fa-thumbs-up like-button btn btn-info'></button>
-            <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment btn btn-warning'></button>
+            <button onClick={function(){self.props.handleComment(video)}} type="button" name="button" className='fa fa-comment comment-button btn btn-warning'></button>
         </div>
       )
     });
