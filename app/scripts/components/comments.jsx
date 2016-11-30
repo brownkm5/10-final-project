@@ -112,10 +112,13 @@ var CommentsComponent = React.createClass({
     })
     return (
       <div className="comment-holder">
+        <p className='comment-title'>Comments:</p>
         <h3>{comments}</h3>
         <form onSubmit={this.handleSubmit}>
-          <input onChange={this.handleComment} type="text" name="" value={this.state.comment} />
-          <button type="submit" name="button">Comment</button>
+          <div className="form-group col-sm-4">
+            <input className='form-control' onChange={this.handleComment} type="text" name="" value={this.state.comment} />
+          </div>
+          <button className='btn btn-success' type="submit" name="button">Comment</button>
         </form>
       </div>
 

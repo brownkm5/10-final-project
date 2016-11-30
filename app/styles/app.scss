@@ -189,7 +189,11 @@ ul {
   }
 }
 
-
+.comment-title {
+  font-size: 28px;
+  color: white;
+  text-decoration: underline;
+}
 .videos {
   margin-bottom: 55px;
 }
@@ -204,9 +208,7 @@ ul {
 
 //followers
 .liked-videos {
-  .gamertag {
-    // margin-right: 360px;
-  }
+  min-height: 500px;
 }
 .follower-delete {
   display: block;

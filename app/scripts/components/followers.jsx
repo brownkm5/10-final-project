@@ -273,18 +273,16 @@ var FollowersContainer = React.createClass({
 
     var followerCollection = this.state.followerCollection;
     var objectId = follower.attributes.objectId;
-    follower.destroy().then(function(){
-      self.setState({followerCollection: self.state.followerCollection});
+
+    var options = {'url':'https://kevinbrowntown.herokuapp.com/classes/Followers/' + objectId, 'method': 'DELETE'};
+    $.ajax(options).success(function(){
+      //updates the page to show the user has been deleted
+      followerCollection.fetch().then(function(){
+        self.setState({followerCollection: self.state.followerCollection});
+      });
+    }).error(function(){
+      self.setState({deleteModal: true});
     });
-    // var options = {'url':'https://kevinbrowntown.herokuapp.com/classes/Followers/' + objectId, 'method': 'DELETE'};
-    // $.ajax(options).success(function(){
-    //   //updates the page to show the user has been deleted
-    //   followerCollection.fetch().then(function(){
-    //     self.setState({followerCollection: self.state.followerCollection});
-    //   });
-    // }).error(function(){
-    //   self.setState({deleteModal: true});
-    // });
   },
   handleFollower: function(follower){
     localStorage.setItem('follower', follower);
