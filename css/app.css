@@ -5838,7 +5838,7 @@ a:hover {
     color: white; }
 
 .logo {
-  height: 30px; }
+  height: 35px; }
 
 .welcome-contain .welcome-page {
   text-align: center; }
@@ -5851,6 +5851,12 @@ a:hover {
     .welcome-contain .carousel img {
       height: 300px; } }
 
+@media (min-width: 768px) {
+  .like-button {
+    margin-right: 80vw; } }
+@media (max-width: 768px) {
+  .like-button {
+    margin-right: 58vw; } }
 .login-container {
   background-color: rgba(0, 0, 0, 0.35);
   height: 280px;
@@ -5930,5 +5936,11 @@ ul {
 @media (max-width: 768px) {
   h3 {
     font-size: 20px; } }
+.profile-image {
+  height: 325px;
+  width: 300px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+  border-radius: 3px; }
 
 /*# sourceMappingURL=app.css.map */

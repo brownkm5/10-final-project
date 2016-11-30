@@ -229,7 +229,7 @@ componentWillMount: function(){
             )
           ), 
             React.createElement("button", {onClick: function(){self.props.handleLike(video)}, type: "button", name: "button", className: "fa fa-thumbs-up like-button btn btn-info"}), 
-            React.createElement("button", {onClick: function(){self.props.handleComment(video)}, type: "button", name: "button", className: "fa fa-comment btn btn-warning"})
+            React.createElement("button", {onClick: function(){self.props.handleComment(video)}, type: "button", name: "button", className: "fa fa-comment comment-button btn btn-warning"})
         )
       )
     });
@@ -975,11 +975,24 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
     return (
       React.createElement(TemplateComponent, null, 
         React.createElement("div", {className: "friends-wrapper"}, 
-          React.createElement("img", {src: this.state.profilePic, alt: "Profile Picture"}), 
-          React.createElement("form", {onSubmit: this.handleUpdate}, 
-            React.createElement("input", {onChange: this.handleName, value: this.state.name}), 
-            React.createElement("input", {onChange: this.handleGamertag, value: this.state.gamertag}), 
-            React.createElement("button", {type: "submit", className: "btn btn-success"}, "Update Profile")
+        React.createElement("div", {className: "row"}, 
+          React.createElement("h3", {className: "title"}, "My Profile")
+        ), 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("img", {className: "profile-image", src: this.state.profilePic, alt: "Profile Picture"})
+          ), 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("form", {className: "update-profile form-group col-sm-4", onSubmit: this.handleUpdate}, 
+              React.createElement("div", {className: "form-group"}, 
+                React.createElement("label", {htmlFor: "name"}, "Name"), 
+                React.createElement("input", {id: "name", className: "form-control", onChange: this.handleName, value: this.state.name})
+              ), 
+              React.createElement("div", {className: "form-group"}, 
+                React.createElement("label", {htmlFor: "gamertag"}, "Gamertag"), 
+                React.createElement("input", {id: "gamertag", className: "form-control", onChange: this.handleGamertag, value: this.state.gamertag})
+              ), 
+              React.createElement("button", {type: "submit", className: "btn btn-success"}, "Update Profile")
+            )
           )
         )
       )
@@ -1173,9 +1186,9 @@ var TemplateComponent = React.createClass({displayName: "TemplateComponent",
           React.createElement("div", {className: "container-fluid"}, 
             React.createElement("ul", {className: "nav navbar-nav hidden-xs"}, 
               React.createElement("li", {className: "navbar-header"}, 
-                React.createElement("a", {id: "testing", className: "navbar-brand logo"}, React.createElement("img", {className: "logo", src: "images/snapshot-logos/shapshot-logo-complex-green.svg", alt: ""}))), 
+                React.createElement("a", {id: "testing", className: "navbar-brand logo"}, React.createElement("img", {className: "logo", src: "images/snapshot-logos/shapshot-logo-complex-white.svg", alt: ""}))), 
               React.createElement("li", {className: "videos/"}, React.createElement("a", {href: "#videos/"}, "My Videos")), 
-              React.createElement("li", {className: ""}, React.createElement("a", {href: "#followers/"}, "Following")), 
+              React.createElement("li", {className: ""}, React.createElement("a", {href: "#followers/"}, "Find Friends")), 
               React.createElement("li", {className: ""}, React.createElement("a", {href: "#likes/"}, "My Likes")), 
               React.createElement("li", {className: "profile"}, React.createElement("a", {href: "#profile/"}, "My Profile"))
             ), 
@@ -1185,7 +1198,7 @@ var TemplateComponent = React.createClass({displayName: "TemplateComponent",
 
             React.createElement("div", {className: "mobile-nav navbar navbar-default hidden-sm hidden-md hidden-lg"}, 
               React.createElement("div", {className: "navbar-header mobile-navbar"}, 
-                React.createElement("a", {id: "testing", className: "navbar-brand logo"}, React.createElement("img", {className: "logo", src: "images/snapshot-logos/shapshot-logo-complex-green.svg", alt: ""})), 
+                React.createElement("a", {id: "testing", className: "navbar-brand logo"}, React.createElement("img", {className: "logo", src: "images/snapshot-logos/shapshot-logo-complex-white.svg", alt: ""})), 
                 React.createElement("button", {className: "navbar-toggle", "data-toggle": "collapse", "data-target": "#navbar-button", "aria-expanded": "false", "aria-controls": "navbar"}, 
                    React.createElement("span", {className: "icon-bar"}), 
                    React.createElement("span", {className: "icon-bar"}), 
@@ -1195,7 +1208,7 @@ var TemplateComponent = React.createClass({displayName: "TemplateComponent",
               React.createElement("div", {className: "navbar-collapse collapse", id: "navbar-button"}, 
                React.createElement("ul", {className: "nav navbar-nav mobile-navbar"}, 
                  React.createElement("li", null, React.createElement("a", {id: "mobilefont1-3", className: "nav-tabs", href: "#videos/"}, "My Videos")), 
-                 React.createElement("li", null, React.createElement("a", {id: "mobilefont1-3", className: "nav-tabs", href: "#followers/"}, "Following")), 
+                 React.createElement("li", null, React.createElement("a", {id: "mobilefont1-3", className: "nav-tabs", href: "#followers/"}, "Find Friends")), 
                  React.createElement("li", null, React.createElement("a", {id: "mobilefont1-3", className: "nav-tabs", href: "#likes/"}, "My Likes")), 
                  React.createElement("li", null, React.createElement("a", {id: "mobilefont", className: "nav-tabs", href: "#profile/"}, "My Profile")), 
                  React.createElement("li", {onClick: this.logout, className: "sign-out"}, React.createElement("a", {href: ""}, "Sign out"))
