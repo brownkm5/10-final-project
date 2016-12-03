@@ -20,6 +20,18 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 a:hover {
   color: white;
 }
+
+.comment-page {
+  min-height: 500px;
+}
+//make the comment input fill the screen on mobile
+@media (max-width: 768px) {
+  .col-sm-4 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
 .nav {
   text-transform: uppercase;
   font-weight: 500;
@@ -217,6 +229,7 @@ ul {
 //uservideos
 .contain-videos {
   background-color: rgb(23,	47,	81);
+  min-height: 650px;
   h3 {
     color: white;
   }
