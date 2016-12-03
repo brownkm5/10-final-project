@@ -10,24 +10,29 @@ var model = require('../models/comment.js');
 
 var VideoContainer = React.createClass({displayName: "VideoContainer",
   getInitialState: function(){
-    var url = "https://xboxapi.com/v2/" + this.props.video.xuid + "/" + "game-clip-details" +  "/" + this.props.video.scid +  "/" + this.props.video.clipId;
+    var url = "https://xboxapi.com/v2/" + this.props.video.xuid + "/" + "game-clip-details/" + this.props.video.scid +  "/" + this.props.video.clipId;
     console.log(url);
     return {
       url: url,
-      videoOwner: ''
+      videoOwner: '',
+      title: ''
     }
   },
   componentWillMount: function(){
     this.ajaxSetup();
 
     var self = this;
-    $.ajax('https://xboxapi.com/v2/gamertag/' + this.props.video.xuid).then(function(response){
-      self.setState({videoOwner: response});
-    });
     var url = this.state.url;
-    $.ajax(url).then(function(response){
-      self.setState({videoUrl: response.gameClipUris[0].uri});
+
+    $.ajax('https://xboxapi.com/v2/gamertag/' + this.props.video.xuid).then(function(response){
+      self.setState({videoOwner: response + ":"});
     });
+
+    $.ajax(url).then(function(response){
+      console.log('response', response.titleName);
+      self.setState({videoUrl: response.gameClipUris[0].uri, title: response.titleName});
+    });
+
   },
   ajaxSetup: function(){
     var userToken = token;
@@ -41,8 +46,7 @@ var VideoContainer = React.createClass({displayName: "VideoContainer",
 
     return (
       React.createElement("div", null, 
-        React.createElement("h3", null, this.state.videoOwner), 
-        React.createElement("h3", null, this.props.video.title), 
+        React.createElement("h3", null, this.state.videoOwner, " ", this.state.title), 
         React.createElement("div", {className: "embed-responsive embed-responsive-16by9"}, 
         React.createElement("video", {src: this.state.videoUrl, width: "520", height: "440", controls: true})
       )
@@ -94,11 +98,11 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
     comment.set('video', this.props.video.clipId);
     comment.set('commenter', JSON.parse(localStorage.getItem('user')).gamertag);
 
-    console.log(comment);
+    // console.log(comment);
 
     commentCollection.create(comment, {
       success: function(){
-        console.log(commentCollection);
+        // console.log(commentCollection);
         self.setState({commentCollection: commentCollection, comment: ''});
       }
     });
@@ -130,7 +134,12 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
 
 var VideoCommentsContainer = React.createClass({displayName: "VideoCommentsContainer",
   getInitialState: function(){
-    var video = JSON.parse(localStorage.getItem('video'));
+    var video = {
+      xuid: this.props.xuid,
+      scid: this.props.scid,
+      clipId: this.props.clipId
+    };
+
     return {
       video: video
     }
@@ -1428,7 +1437,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
-      console.log(likedVideo);
+      // console.log(likedVideo);
     });
   },
 
@@ -1436,7 +1445,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
   // getUser: function(){
   //   var self = this;
@@ -1796,7 +1805,7 @@ var AppRouter = Backbone.Router.extend({
     'likes/': 'likes',
     'profile/': 'profile',
     'users/': 'users',
-    'comments/:id/': 'comments'
+    'comments/:id/:id/:id/': 'comments'
   },
 
   // initialize: function(){
@@ -1851,9 +1860,9 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  comments: function(){
+  comments: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(CommentsContainer, {router:this}),
+      React.createElement(CommentsContainer, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   }
