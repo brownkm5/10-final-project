@@ -8,24 +8,29 @@ var model = require('../models/comment.js');
 
 var VideoContainer = React.createClass({
   getInitialState: function(){
-    var url = "https://xboxapi.com/v2/" + this.props.video.xuid + "/" + "game-clip-details" +  "/" + this.props.video.scid +  "/" + this.props.video.clipId;
+    var url = "https://xboxapi.com/v2/" + this.props.video.xuid + "/" + "game-clip-details/" + this.props.video.scid +  "/" + this.props.video.clipId;
     console.log(url);
     return {
       url: url,
-      videoOwner: ''
+      videoOwner: '',
+      title: ''
     }
   },
   componentWillMount: function(){
     this.ajaxSetup();
 
     var self = this;
-    $.ajax('https://xboxapi.com/v2/gamertag/' + this.props.video.xuid).then(function(response){
-      self.setState({videoOwner: response});
-    });
     var url = this.state.url;
-    $.ajax(url).then(function(response){
-      self.setState({videoUrl: response.gameClipUris[0].uri});
+
+    $.ajax('https://xboxapi.com/v2/gamertag/' + this.props.video.xuid).then(function(response){
+      self.setState({videoOwner: response + ":"});
     });
+
+    $.ajax(url).then(function(response){
+      console.log('response', response.titleName);
+      self.setState({videoUrl: response.gameClipUris[0].uri, title: response.titleName});
+    });
+
   },
   ajaxSetup: function(){
     var userToken = token;
@@ -39,8 +44,7 @@ var VideoContainer = React.createClass({
 
     return (
       <div>
-        <h3>{this.state.videoOwner}</h3>
-        <h3>{this.props.video.title}</h3>
+        <h3>{this.state.videoOwner} {this.state.title}</h3>
         <div className="embed-responsive embed-responsive-16by9">
         <video src={this.state.videoUrl} width="520" height="440" controls></video>
       </div>
@@ -92,11 +96,11 @@ var CommentsComponent = React.createClass({
     comment.set('video', this.props.video.clipId);
     comment.set('commenter', JSON.parse(localStorage.getItem('user')).gamertag);
 
-    console.log(comment);
+    // console.log(comment);
 
     commentCollection.create(comment, {
       success: function(){
-        console.log(commentCollection);
+        // console.log(commentCollection);
         self.setState({commentCollection: commentCollection, comment: ''});
       }
     });
@@ -128,7 +132,12 @@ var CommentsComponent = React.createClass({
 
 var VideoCommentsContainer = React.createClass({
   getInitialState: function(){
-    var video = JSON.parse(localStorage.getItem('video'));
+    var video = {
+      xuid: this.props.xuid,
+      scid: this.props.scid,
+      clipId: this.props.clipId
+    };
+
     return {
       video: video
     }

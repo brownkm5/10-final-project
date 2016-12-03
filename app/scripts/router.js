@@ -24,7 +24,7 @@ var AppRouter = Backbone.Router.extend({
     'likes/': 'likes',
     'profile/': 'profile',
     'users/': 'users',
-    'comments/:id/': 'comments'
+    'comments/:id/:id/:id/': 'comments'
   },
 
   // initialize: function(){
@@ -79,9 +79,9 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  comments: function(){
+  comments: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(CommentsContainer, {router:this}),
+      React.createElement(CommentsContainer, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   }

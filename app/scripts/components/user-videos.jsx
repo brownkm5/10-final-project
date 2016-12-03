@@ -190,7 +190,7 @@ var VideosContainer = React.createClass({
       likedVideo.set('gamertag', response);
       self.parseSetup();
       likeCollection.create(likedVideo);
-      console.log(likedVideo);
+      // console.log(likedVideo);
     });
   },
 
@@ -198,7 +198,7 @@ var VideosContainer = React.createClass({
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
   // getUser: function(){
   //   var self = this;
