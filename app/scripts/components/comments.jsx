@@ -96,18 +96,13 @@ var CommentsComponent = React.createClass({
     comment.set('video', this.props.video.clipId);
     comment.set('commenter', JSON.parse(localStorage.getItem('user')).gamertag);
 
-    // console.log(comment);
 
     commentCollection.create(comment, {
       success: function(){
-        // console.log(commentCollection);
+
         self.setState({commentCollection: commentCollection, comment: ''});
       }
     });
-    //it says .then isnt a function
-    // .then(function(){
-    //   self.setState({commentCollection: commentCollection});
-    // })
   },
   render: function(){
     var commentCollection = this.state.commentCollection;
@@ -145,8 +140,10 @@ var VideoCommentsContainer = React.createClass({
   render: function(){
     return (
       <TemplateComponent>
-        <VideoContainer video={this.state.video}/>
-        <CommentsComponent video={this.state.video}/>
+        <div className="comment-page">
+          <VideoContainer video={this.state.video}/>
+          <CommentsComponent video={this.state.video}/>
+        </div>
       </TemplateComponent>
     )
   }

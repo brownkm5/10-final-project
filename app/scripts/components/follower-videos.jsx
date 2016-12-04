@@ -109,7 +109,8 @@ componentWillMount: function(){
 
 var FollowerVideoContainer = React.createClass({
   getInitialState: function(){
-    var user = this.props.children.userId;
+    var user = this.props.xuid;
+    // console.log(user);
     var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
     return {
       user: user,
@@ -174,7 +175,7 @@ var FollowerVideoContainer = React.createClass({
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
 
   render: function(){

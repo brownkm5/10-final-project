@@ -108,7 +108,7 @@ var LikesContainer = React.createClass({
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
 
   render: function(){

@@ -61,15 +61,15 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  followerVideos: function(userId){
+  followerVideos: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(FollowerVideos, {router:this}, {userId: userId}),
+      React.createElement(FollowerVideos, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   },
-  likes: function(){
+  likes: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(LikesContainer, {router:this}),
+      React.createElement(LikesContainer, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   },

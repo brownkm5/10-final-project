@@ -138,7 +138,7 @@ var FormComponent = React.createClass({
         <form onSubmit={this.handleAddFollower} className="form-inline col-sm-5 add-follower">
           <label htmlFor='gamertag'>Gamertag</label>
           <input className='form-control' onChange={this.handleGamertag} id='gamertag' placeholder='Gamertag'  type="text" name="name" value={this.state.gamertag} />
-          <button className='add-follower btn btn-success' type="submit" name="button">Add Follower</button>
+          <button className='add-follower btn btn-success' type="submit" name="button">Add Friend</button>
         </form>
       </div>
     )
@@ -167,7 +167,7 @@ var FollowerComponent = React.createClass({
           <a onClick={function(){self.props.handleFollower(follower.get('gamertag'))}} href={'#followers/' + follower.attributes.xuid + '/videos/'} className='' >
             <h1>{follower.get('gamertag')}</h1>
           </a>
-          <button onClick={function(){self.props.handleDelete(follower)}} type='button' className='follower-delete btn btn-danger'>Delete Follower</button>
+          <button onClick={function(){self.props.handleDelete(follower)}} type='button' className='follower-delete btn btn-danger'>Delete Friend</button>
         </div>
     )
     });
@@ -295,7 +295,7 @@ var FollowersContainer = React.createClass({
           <UserDeletedErrorModal deleteModal={this.state.deleteModal} />
           <h3 className='title'>My Friends</h3>
 
-          <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Follower</button>
+          <button className='add-button btn btn-primary' type="button" name="button" onClick={this.handleToggleForm}>Add Friend</button>
 
           <div className="">
               {this.state.showForm ? <FormComponent addfollower={this.addfollower}/> : null}

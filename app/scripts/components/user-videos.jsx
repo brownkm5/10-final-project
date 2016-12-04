@@ -14,12 +14,6 @@ var UserComponent = React.createClass({
     var xuid = user.xuid;
     var response = '';
 
-    // ! not sure if i need this anymore either !
-
-    //i set the userxuid to my actual xuid for building so that i didnt have to do an ajax request
-    //everytime to get that, reset it back to var xuid for final deploy/ also in the container component
-    //also remove the component will mount and replace it with the props and did update
-    //youll still need the ajax setup
     return {
       user: user,
       videos: videos,
@@ -43,18 +37,12 @@ var UserComponent = React.createClass({
       }
     });
   },
-  // componentWillReceiveProps: function(nextProps){
-  //   var xuid = nextProps.xuid;
-  //   this.setState({userXuid: xuid});
-  // },
-  // componentDidUpdate: function(){
-  //   this.getVideos();
-  // },
+
   getVideos: function(){
     var self = this;
     var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
-// response has a gameclip id for each video, might need to use this to create comments on each video
+
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
       // console.log(response);
       var videos = response.map(function(video){
@@ -118,6 +106,9 @@ var UserComponent = React.createClass({
             <button type='button' className='btn btn-primary' onClick={this.handlePageLast}>Last</button>
             <h3>Page {pageNumber}</h3>
             <button type='button' className='btn btn-primary' onClick={this.handlePageNext}>Next</button>
+          </div>
+          <div className='filter'>
+
           </div>
           <div className='video-container'>
             <ul className='col-sm-12'>
