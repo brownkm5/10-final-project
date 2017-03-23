@@ -98,18 +98,13 @@ var CommentsComponent = React.createClass({displayName: "CommentsComponent",
     comment.set('video', this.props.video.clipId);
     comment.set('commenter', JSON.parse(localStorage.getItem('user')).gamertag);
 
-    // console.log(comment);
 
     commentCollection.create(comment, {
       success: function(){
-        // console.log(commentCollection);
+
         self.setState({commentCollection: commentCollection, comment: ''});
       }
     });
-    //it says .then isnt a function
-    // .then(function(){
-    //   self.setState({commentCollection: commentCollection});
-    // })
   },
   render: function(){
     var commentCollection = this.state.commentCollection;
@@ -147,8 +142,10 @@ var VideoCommentsContainer = React.createClass({displayName: "VideoCommentsConta
   render: function(){
     return (
       React.createElement(TemplateComponent, null, 
-        React.createElement(VideoContainer, {video: this.state.video}), 
-        React.createElement(CommentsComponent, {video: this.state.video})
+        React.createElement("div", {className: "comment-page"}, 
+          React.createElement(VideoContainer, {video: this.state.video}), 
+          React.createElement(CommentsComponent, {video: this.state.video})
+        )
       )
     )
   }
@@ -271,7 +268,8 @@ componentWillMount: function(){
 
 var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoContainer",
   getInitialState: function(){
-    var user = this.props.children.userId;
+    var user = this.props.xuid;
+    // console.log(user);
     var userObjectId = JSON.parse(localStorage.getItem('user')).objectId;
     return {
       user: user,
@@ -287,7 +285,7 @@ var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoConta
     var userToken = token;
     $.ajaxSetup({
       beforeSend: function(xhr){
-        xhr.setRequestHeader('X-Auth', userToken);
+        xhr.setRequestHeader('X-Auth', 'da4b685574e5546dbd34e64ed1e6c8c7946435d7');
       }
     });
   },
@@ -336,7 +334,7 @@ var FollowerVideoContainer = React.createClass({displayName: "FollowerVideoConta
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
 
   render: function(){
@@ -494,7 +492,7 @@ var FormComponent = React.createClass({displayName: "FormComponent",
         React.createElement("form", {onSubmit: this.handleAddFollower, className: "form-inline col-sm-5 add-follower"}, 
           React.createElement("label", {htmlFor: "gamertag"}, "Gamertag"), 
           React.createElement("input", {className: "form-control", onChange: this.handleGamertag, id: "gamertag", placeholder: "Gamertag", type: "text", name: "name", value: this.state.gamertag}), 
-          React.createElement("button", {className: "add-follower btn btn-success", type: "submit", name: "button"}, "Add Follower")
+          React.createElement("button", {className: "add-follower btn btn-success", type: "submit", name: "button"}, "Add Friend")
         )
       )
     )
@@ -523,7 +521,7 @@ var FollowerComponent = React.createClass({displayName: "FollowerComponent",
           React.createElement("a", {onClick: function(){self.props.handleFollower(follower.get('gamertag'))}, href: '#followers/' + follower.attributes.xuid + '/videos/', className: ""}, 
             React.createElement("h1", null, follower.get('gamertag'))
           ), 
-          React.createElement("button", {onClick: function(){self.props.handleDelete(follower)}, type: "button", className: "follower-delete btn btn-danger"}, "Delete Follower")
+          React.createElement("button", {onClick: function(){self.props.handleDelete(follower)}, type: "button", className: "follower-delete btn btn-danger"}, "Delete Friend")
         )
     )
     });
@@ -651,7 +649,7 @@ var FollowersContainer = React.createClass({displayName: "FollowersContainer",
           React.createElement(UserDeletedErrorModal, {deleteModal: this.state.deleteModal}), 
           React.createElement("h3", {className: "title"}, "My Friends"), 
 
-          React.createElement("button", {className: "add-button btn btn-primary", type: "button", name: "button", onClick: this.handleToggleForm}, "Add Follower"), 
+          React.createElement("button", {className: "add-button btn btn-primary", type: "button", name: "button", onClick: this.handleToggleForm}, "Add Friend"), 
 
           React.createElement("div", {className: ""}, 
               this.state.showForm ? React.createElement(FormComponent, {addfollower: this.addfollower}) : null
@@ -779,7 +777,7 @@ var LikesContainer = React.createClass({displayName: "LikesContainer",
     var videoData = {xuid: video.get('xuid'), scid: video.get('scid'), clipId: video.get('clipId'), title: video.get('title')};
 
     localStorage.setItem('video', JSON.stringify(videoData));
-    this.props.router.navigate('#comments/' + video.get('clipId') + '/', {trigger: true});
+    this.props.router.navigate('#comments/' + video.get('xuid') + '/' + video.get('scid') + "/" + video.get('clipId') + "/", {trigger: true});
   },
 
   render: function(){
@@ -1261,12 +1259,6 @@ var UserComponent = React.createClass({displayName: "UserComponent",
     var xuid = user.xuid;
     var response = '';
 
-    // ! not sure if i need this anymore either !
-
-    //i set the userxuid to my actual xuid for building so that i didnt have to do an ajax request
-    //everytime to get that, reset it back to var xuid for final deploy/ also in the container component
-    //also remove the component will mount and replace it with the props and did update
-    //youll still need the ajax setup
     return {
       user: user,
       videos: videos,
@@ -1279,6 +1271,14 @@ var UserComponent = React.createClass({displayName: "UserComponent",
     this.getVideos();
     this.ajaxSetup();
   },
+  parseSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', 'da4b685574e5546dbd34e64ed1e6c8c7946435d7');
+      }
+    });
+  },
   ajaxSetup: function(token){
     $.ajaxSetup({
       beforeSend: function(xhr){
@@ -1290,18 +1290,13 @@ var UserComponent = React.createClass({displayName: "UserComponent",
       }
     });
   },
-  // componentWillReceiveProps: function(nextProps){
-  //   var xuid = nextProps.xuid;
-  //   this.setState({userXuid: xuid});
-  // },
-  // componentDidUpdate: function(){
-  //   this.getVideos();
-  // },
+
   getVideos: function(){
+    this.parseSetup();
     var self = this;
     var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
-// response has a gameclip id for each video, might need to use this to create comments on each video
+
     $.ajax('https://xboxapi.com/v2/' + xuid + '/game-clips').then(function(response){
       // console.log(response);
       var videos = response.map(function(video){
@@ -1366,6 +1361,9 @@ var UserComponent = React.createClass({displayName: "UserComponent",
             React.createElement("h3", null, "Page ", pageNumber), 
             React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.handlePageNext}, "Next")
           ), 
+          React.createElement("div", {className: "filter"}
+
+          ), 
           React.createElement("div", {className: "video-container"}, 
             React.createElement("ul", {className: "col-sm-12"}, 
               uris
@@ -1398,7 +1396,7 @@ var VideosContainer = React.createClass({displayName: "VideosContainer",
     var userToken = token;
     $.ajaxSetup({
       beforeSend: function(xhr){
-        xhr.setRequestHeader('X-Auth', userToken);
+        xhr.setRequestHeader('X-Auth', 'e49b83a54188a39d99fbe84cdc58caf43e5c1dd3');
       }
     });
   },
@@ -1842,15 +1840,15 @@ var AppRouter = Backbone.Router.extend({
       document.getElementById('app')
     );
   },
-  followerVideos: function(userId){
+  followerVideos: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(FollowerVideos, {router:this}, {userId: userId}),
+      React.createElement(FollowerVideos, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   },
-  likes: function(){
+  likes: function(xuid, scid, clipId){
     ReactDOM.render(
-      React.createElement(LikesContainer, {router:this}),
+      React.createElement(LikesContainer, {router:this, xuid: xuid, scid:scid, clipId: clipId}),
       document.getElementById('app')
     );
   },
