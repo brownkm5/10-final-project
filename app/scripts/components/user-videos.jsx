@@ -26,6 +26,14 @@ var UserComponent = React.createClass({
     this.getVideos();
     this.ajaxSetup();
   },
+  parseSetup: function(){
+    var userToken = token;
+    $.ajaxSetup({
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-Auth', 'da4b685574e5546dbd34e64ed1e6c8c7946435d7');
+      }
+    });
+  },
   ajaxSetup: function(token){
     $.ajaxSetup({
       beforeSend: function(xhr){
@@ -39,6 +47,7 @@ var UserComponent = React.createClass({
   },
 
   getVideos: function(){
+    this.parseSetup();
     var self = this;
     var xuid = this.state.xuid;
     var videoCollection = this.state.videoCollection;
